@@ -926,9 +926,11 @@ int _TtreeNode::traverse_forward(MallocBase &stMalloc, ItemVisit pfVisit,
 	}
 
 	for (int i = 0; i < m_ushNItems; i++) {
-		if ((iRet = pfVisit(stMalloc, m_ahItems[i], pCookie)) != 0) {
+		ALLOC_HANDLE_T hItem = m_ahItems[i];
+		if ((iRet = pfVisit(stMalloc, hItem, pCookie)) != 0) {
 			return (iRet);
 		}
+		m_ahItems[i] = hItem;
 	}
 
 	if (m_hRight != INVALID_HANDLE) {
@@ -955,9 +957,11 @@ int _TtreeNode::traverse_backward(MallocBase &stMalloc, ItemVisit pfVisit,
 		}
 	}
 	for (int i = m_ushNItems; --i >= 0;) {
-		if ((iRet = pfVisit(stMalloc, m_ahItems[i], pCookie)) != 0) {
+		ALLOC_HANDLE_T hItem = m_ahItems[i];
+		if ((iRet = pfVisit(stMalloc, hItem, pCookie)) != 0) {
 			return (iRet);
 		}
+		m_ahItems[i] = hItem;
 	}
 	if (m_hLeft != INVALID_HANDLE) {
 		if ((iRet = ((TtreeNode *)stMalloc.handle_to_ptr(m_hLeft))
@@ -992,9 +996,11 @@ int _TtreeNode::post_order_traverse(MallocBase &stMalloc, ItemVisit pfVisit,
 	}
 
 	for (int i = m_ushNItems; --i >= 0;) {
-		if ((iRet = pfVisit(stMalloc, m_ahItems[i], pCookie)) != 0) {
+		ALLOC_HANDLE_T hItem = m_ahItems[i];
+		if ((iRet = pfVisit(stMalloc, hItem, pCookie)) != 0) {
 			return (iRet);
 		}
+		m_ahItems[i] = hItem;
 	}
 
 	return (0);
@@ -1031,10 +1037,12 @@ int _TtreeNode::traverse_forward(MallocBase &stMalloc, const char *pchKey,
 			iDiff = pfComp(pchKey, pCmpCookie, stMalloc,
 				       m_ahItems[i]);
 			if (iDiff <= 0 && iDiff >= 0 - iInclusion) {
-				if ((iRet = pfVisit(stMalloc, m_ahItems[i],
+				ALLOC_HANDLE_T hItem = m_ahItems[i];
+				if ((iRet = pfVisit(stMalloc, hItem,
 						    pCookie)) != 0) {
 					return (iRet);
 				}
+				m_ahItems[i] = hItem;
 			} else if (iDiff < 0 - iInclusion) {
 				break;
 			}
@@ -1090,11 +1098,13 @@ int _TtreeNode::traverse_forward(MallocBase &stMalloc, const char *pchKey,
 				iDiff1 = pfComp(pchKey1, pCmpCookie, stMalloc,
 						m_ahItems[i]);
 				if (iDiff1 >= 0) {
+					ALLOC_HANDLE_T hItem = m_ahItems[i];
 					if ((iRet = pfVisit(stMalloc,
-							    m_ahItems[i],
+							    hItem,
 							    pCookie)) != 0) {
 						return (iRet);
 					}
+					m_ahItems[i] = hItem;
 				}
 			}
 		}
@@ -1144,10 +1154,12 @@ int _TtreeNode::traverse_forward(MallocBase &stMalloc, const char *pchKey,
 			iDiff = pfComp(pchKey, pCmpCookie, stMalloc,
 				       m_ahItems[i]);
 			if (iDiff <= 0) {
-				if ((iRet = pfVisit(stMalloc, m_ahItems[i],
+				ALLOC_HANDLE_T hItem = m_ahItems[i];
+				if ((iRet = pfVisit(stMalloc, hItem,
 						    pCookie)) != 0) {
 					return (iRet);
 				}
+				m_ahItems[i] = hItem;
 			}
 		}
 	}
@@ -1201,11 +1213,13 @@ int _TtreeNode::traverse_backward(MallocBase &stMalloc, const char *pchKey,
 				iDiff1 = pfComp(pchKey1, pCmpCookie, stMalloc,
 						m_ahItems[i]);
 				if (iDiff1 >= 0) {
+					ALLOC_HANDLE_T hItem = m_ahItems[i];
 					if ((iRet = pfVisit(stMalloc,
-							    m_ahItems[i],
+							    hItem,
 							    pCookie)) != 0) {
 						return (iRet);
 					}
+					m_ahItems[i] = hItem;
 				}
 			}
 		}
@@ -1253,10 +1267,12 @@ int _TtreeNode::traverse_backward(MallocBase &stMalloc, const char *pchKey,
 			iDiff = pfComp(pchKey, pCmpCookie, stMalloc,
 				       m_ahItems[i]);
 			if (iDiff >= 0) {
-				if ((iRet = pfVisit(stMalloc, m_ahItems[i],
+				ALLOC_HANDLE_T hItem = m_ahItems[i];
+				if ((iRet = pfVisit(stMalloc, hItem,
 						    pCookie)) != 0) {
 					return (iRet);
 				}
+				m_ahItems[i] = hItem;
 			}
 		}
 	}
@@ -1321,11 +1337,13 @@ int _TtreeNode::post_order_traverse(MallocBase &stMalloc, const char *pchKey,
 				iDiff1 = pfComp(pchKey1, pCmpCookie, stMalloc,
 						m_ahItems[i]);
 				if (iDiff1 >= 0) {
+					ALLOC_HANDLE_T hItem = m_ahItems[i];
 					if ((iRet = pfVisit(stMalloc,
-							    m_ahItems[i],
+							    hItem,
 							    pCookie)) != 0) {
 						return (iRet);
 					}
+					m_ahItems[i] = hItem;
 				}
 			}
 		}
@@ -1372,10 +1390,12 @@ int _TtreeNode::post_order_traverse_ge(MallocBase &stMalloc, const char *pchKey,
 			iDiff = pfComp(pchKey, pCmpCookie, stMalloc,
 				       m_ahItems[i]);
 			if (iDiff <= 0) {
-				if ((iRet = pfVisit(stMalloc, m_ahItems[i],
+				ALLOC_HANDLE_T hItem = m_ahItems[i];
+				if ((iRet = pfVisit(stMalloc, hItem,
 						    pCookie)) != 0) {
 					return (iRet);
 				}
+				m_ahItems[i] = hItem;
 			}
 		}
 	}
@@ -1420,10 +1440,12 @@ int _TtreeNode::post_order_traverse_le(MallocBase &stMalloc, const char *pchKey,
 			iDiff = pfComp(pchKey, pCmpCookie, stMalloc,
 				       m_ahItems[i]);
 			if (iDiff >= 0) {
-				if ((iRet = pfVisit(stMalloc, m_ahItems[i],
+				ALLOC_HANDLE_T hItem = m_ahItems[i];
+				if ((iRet = pfVisit(stMalloc, hItem,
 						    pCookie)) != 0) {
 					return (iRet);
 				}
+				m_ahItems[i] = hItem;
 			}
 		}
 	}

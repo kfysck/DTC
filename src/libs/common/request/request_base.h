@@ -127,7 +127,7 @@ template <typename T> class ChainJoint : private TimerObject {
 	{
 		if (use_queue) {
 			queue.Push(p);
-			attach_ready_timer(owner);
+			attach_ready_timer(reinterpret_cast<TimerUnit*>(owner));
 		} else {
 			job_ask_procedure(p);
 		}

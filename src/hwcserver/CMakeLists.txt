@@ -1,5 +1,4 @@
 FILE(GLOB_RECURSE SRC_LIST ./*.cc  ../connector/*tion.cc)
-message(${SRC_LIST})
 
 include(../utils.cmake)
 
@@ -37,7 +36,6 @@ LINK_LIBRARIES(libsqlparser.a)
 LINK_LIBRARIES(libyaml-cpp.a)
 LINK_LIBRARIES(libz64.a)
 LINK_LIBRARIES(pthread)
-LINK_LIBRARIES(nsl)
 LINK_LIBRARIES(stdc++)
 LINK_LIBRARIES(dl)
 LINK_LIBRARIES(z)
@@ -48,10 +46,10 @@ LINK_LIBRARIES(libstat.a)
 LINK_LIBRARIES(libmysqlclient.a)
 LINK_LIBRARIES(libdtcapi.so)
 
-ADD_DEFINITIONS ("-g -fPIC -fpermissive -std=gnu++11 -DOMN_PLATFORM_UNIX -Wl,--no-undefined -Xlinker -zmuldefs")
+ADD_DEFINITIONS ("-g -fPIC -fpermissive -std=gnu++11 -D_GLIBCXX_USE_CXX11_ABI=0 -DOMN_PLATFORM_UNIX -Wl,--no-undefined -Xlinker -zmuldefs")
 ADD_DEFINITIONS(-Wno-builtin-macro-redefined)
 
 ADD_EXECUTABLE(hwcserver  ${SRC_LIST})
 
-TARGET_LINK_LIBRARIES(hwcserver  libcore.a libdaemons.a libstat.a libcommon.a liblog4cplus.a  libyaml-cpp.a  libz64.a libmysqlclient.a libdtcapi.so)
+TARGET_LINK_LIBRARIES(hwcserver libcore.a libdaemons.a libstat.a libcommon.a liblog4cplus.a libyaml-cpp.a libz64.a libmysqlclient.a libdtcapi.so)
 redefine_file_macro(hwcserver)

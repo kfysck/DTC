@@ -17,7 +17,7 @@ void WatchDogHWC::exec(void)
 	// ./hwcserver -d ../conf/dtc.yaml
 	argv[0] = watchdog_object_name_;
 	argv[1] = (char*)"-d";
-    argv[2] = "../conf/dtc.yaml";
+    argv[2] = (char*)"../conf/dtc.yaml";
 	argv[3] = NULL;
 	execv(argv[0], argv);
 }

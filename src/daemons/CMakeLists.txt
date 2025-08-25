@@ -2,9 +2,9 @@ INCLUDE_DIRECTORIES(
     ${PROJECT_SOURCE_DIR}/src/daemons
     ${PROJECT_SOURCE_DIR}/src/libs/common
     ${PROJECT_SOURCE_DIR}/src/libs/stat
-    ${PROJECT_SOURCE_DIR}/src/core
     ${PROJECT_SOURCE_DIR}/src/libs/log4cplus/include
-    ${PROJECT_SOURCE_DIR}/src/libs/yaml-cpp/include)
+    ${PROJECT_SOURCE_DIR}/src/libs/yaml-cpp/include
+    ${PROJECT_SOURCE_DIR}/src/core)
     
 LINK_DIRECTORIES(
     ${PROJECT_SOURCE_DIR}/src/libs/log4cplus/libs
@@ -24,7 +24,7 @@ LINK_LIBRARIES(libstat.a)
 LINK_LIBRARIES(pthread)
 LINK_LIBRARIES(dl)
 
-ADD_DEFINITIONS("-g -fPIC -fpermissive -std=gnu++11")
+ADD_DEFINITIONS("-g -fPIC -fpermissive -std=gnu++11 -D_GLIBCXX_USE_CXX11_ABI=0")
 ADD_DEFINITIONS(-Wno-builtin-macro-redefined)
 
 ADD_EXECUTABLE(faultlogger ${SRC_LIST1})

@@ -163,7 +163,7 @@ void DtcJob::decode_stream(SimpleReceiver &receiver)
 	return;
 }
 
-int8_t DtcJob::select_version(char *packetIn, int packetLen)
+int8_t DtcJob::select_version(const char *packetIn, int packetLen)
 {
 	int8_t ver = 0;
 	log4cplus_debug("select version entry.");
@@ -205,7 +205,7 @@ int8_t DtcJob::select_version(char *packetIn, int packetLen)
 	return -3;
 }
 
-void DtcJob::decode_mysql_packet(char *packetIn, int packetLen, int type)
+void DtcJob::decode_mysql_packet(const char *packetIn, int packetLen, int type)
 {
 	if(_client_owner == NULL)
 	{

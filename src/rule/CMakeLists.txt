@@ -36,4 +36,5 @@ ADD_LIBRARY(rule SHARED ${SRC_LIST})
 #将目标文件与库文件链接
 TARGET_LINK_LIBRARIES(rule libsqlparser.so liblog4cplus.a libyaml-cpp.a libmxml.a)
 TARGET_LINK_LIBRARIES(rule.bin libsqlparser.so liblog4cplus.a libyaml-cpp.a libmxml.a)
-redefine_file_macro(conf-gen-utils)
+redefine_file_macro(rule)
+redefine_file_macro(rule.bin)

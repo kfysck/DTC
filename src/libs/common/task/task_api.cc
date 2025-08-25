@@ -30,7 +30,7 @@
 #include "result.h"
 #include <dtcint.h>
 
-inline int DTCFieldSet::Copy(const FieldSetByName &rq)
+int DTCFieldSet::Copy(const FieldSetByName &rq)
 {
 	const int num = rq.num_fields();
 	for (int n = 0; n < num; n++) {

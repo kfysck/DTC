@@ -209,7 +209,7 @@ class DtcJob : public TableReference {
 	int decode_field_set(char *d, int l);
 
     private:
-	int8_t select_version(char *packetIn, int packetLen);
+	int8_t select_version(const char *packetIn, int packetLen);
 	ClientAgent* _client_owner;
 
     public:
@@ -359,7 +359,7 @@ class DtcJob : public TableReference {
 	}
 	void set_request_fields(const DTCFieldSet* p_dtc_field_set)
 	{
-		fieldList = p_dtc_field_set;
+		fieldList = const_cast<DTCFieldSet*>(p_dtc_field_set);
 	}
 	const uint64_t request_serial(void) const
 	{
@@ -406,7 +406,7 @@ class DtcJob : public TableReference {
 	//     type 2: use external packet
 	void decode_packet_v1(char *packetIn, int packetLen, int type);
 	void decode_packet_v2(char *packetIn, int packetLen, int type);
-	void decode_mysql_packet(char *packetIn, int packetLen, int type);
+	void decode_mysql_packet(const char *packetIn, int packetLen, int type);
 
 	int build_field_type_r(int sql_type, char *field_name);
 	int8_t get_pac_version() { return pac_version; }
