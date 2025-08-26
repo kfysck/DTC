@@ -26,7 +26,7 @@ std::map<std::string, std::string> map_dtc_conf; //key:value --> dtc addr:conf f
 #define DA_STRING(x)			DA_STRING_HELPER(x)
 
 #define DA_VERSION_STR \
-	DA_STRING(DA_VERSION_MAJOR)"."DA_STRING(DA_VERSION_MINOR)"."\
+	DA_STRING(DA_VERSION_MAJOR) "." DA_STRING(DA_VERSION_MINOR) "." \
 	DA_STRING(DA_VERSION_BUILD)
 
 static int show_help;
@@ -368,7 +368,7 @@ int get_all_dtc_confs()
 		int content_len = 0;
 		log4cplus_debug("addr:%s", addr.c_str());
 		std::string str = send_select_dtcyaml((addr.substr(0, addr.find(':'))).c_str(), atoi((addr.substr(addr.find(':')+1)).c_str()));
-		content = str.c_str();
+		content = const_cast<char*>(str.c_str());
 		content_len = str.length();
 		log4cplus_debug("content:%s", content);
 

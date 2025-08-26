@@ -39,8 +39,8 @@ void ShardingEntry::exec()
 	{
 		set_proc_title("agent_sharding");
 		argv[0] = (char *)"../sharding/bin/start.sh";
-		argv[1] = "3307";
-		argv[2] = "../conf";
+		argv[1] = const_cast<char*>("3307");
+		argv[2] = const_cast<char*>("../conf");
 		argv[3] = NULL;
 		execv(argv[0], argv);
 	}

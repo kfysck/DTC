@@ -16,8 +16,8 @@ LINK_DIRECTORIES(
 
 include(../utils.cmake)
 
-FILE(GLOB_RECURSE SRC_LIST1 ./*.cc ./*.c)
-
+FILE(GLOB_RECURSE CXX_SRC_LIST ./*.cc)
+FILE(GLOB_RECURSE C_SRC_LIST ./*.c)
 
 LINK_LIBRARIES(liblog4cplus.a) 
 LINK_LIBRARIES(libcommon.a)
@@ -26,10 +26,13 @@ LINK_LIBRARIES(libstat.a)
 LINK_LIBRARIES(pthread)
 LINK_LIBRARIES(dl)
 
-ADD_DEFINITIONS("-g -fPIC -fpermissive -std=gnu++11 -D_GLIBCXX_USE_CXX11_ABI=0")
-ADD_DEFINITIONS(-Wno-builtin-macro-redefined)
+# Set properties for C++ files
+set_source_files_properties(${CXX_SRC_LIST} PROPERTIES COMPILE_FLAGS "-g -fPIC -fpermissive -std=gnu++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wno-builtin-macro-redefined")
 
-ADD_EXECUTABLE(agent-watchdog ${SRC_LIST1})
+# Set properties for C files  
+set_source_files_properties(${C_SRC_LIST} PROPERTIES COMPILE_FLAGS "-g -fPIC -Wno-builtin-macro-redefined")
+
+ADD_EXECUTABLE(agent-watchdog ${CXX_SRC_LIST} ${C_SRC_LIST})
 
 TARGET_LINK_LIBRARIES(agent-watchdog libstat.a libcommon.a libyaml-cpp.a liblog4cplus.a mxml)
 redefine_file_macro(agent-watchdog)
