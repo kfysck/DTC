@@ -38,7 +38,7 @@ public:
     void ChangeState(int iNewState);
 
 public:
-    void BindDBConfigParser(const DbConfig* const p_parser)
+    void BindDBConfigParser(DbConfig* const p_parser)
     { p_db_config_ = p_parser;}
 
     DbConfig* const GetDBConfigParser()

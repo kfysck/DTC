@@ -49,7 +49,7 @@ CDBConn::CDBConn()
 
     if (mysql_init(&Mysql) == NULL) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1, "mysql init error: %s",
+        snprintf(achErr, sizeof(achErr), "mysql init error: %s",
              mysql_error(&Mysql));
     }
 }
@@ -76,7 +76,7 @@ CDBConn::CDBConn(const DBHost *Host)
 
     if (mysql_init(&Mysql) == NULL) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1, "mysql init error: %s",
+        snprintf(achErr, sizeof(achErr), "mysql init error: %s",
              mysql_error(&Mysql));
     }
 }
@@ -142,7 +142,7 @@ int CDBConn::Connect(const char *DBName)
     if (!Connected) {
         if (mysql_init(&Mysql) == NULL) {
             db_err = mysql_errno(&Mysql);
-            snprintf(achErr, sizeof(achErr) - 1,
+            snprintf(achErr, sizeof(achErr),
                  "mysql init error: %s", mysql_error(&Mysql));
             return (-1);
         }
@@ -161,7 +161,7 @@ int CDBConn::Connect(const char *DBName)
             mysql_options(&Mysql, MYSQL_READ_DEFAULT_FILE,
                   DBConfig.OptionFile) != 0) {
             db_err = mysql_errno(&Mysql);
-            snprintf(achErr, sizeof(achErr) - 1,
+            snprintf(achErr, sizeof(achErr),
                  "mysql_options error: %s",
                  mysql_error(&Mysql));
             return (-2);
@@ -174,7 +174,7 @@ int CDBConn::Connect(const char *DBName)
                        use_matched ? CLIENT_FOUND_ROWS : 0) ==
             NULL) {
             db_err = mysql_errno(&Mysql);
-            snprintf(achErr, sizeof(achErr) - 1,
+            snprintf(achErr, sizeof(achErr),
                  "mysql connect error: %s",
                  mysql_error(&Mysql));
             return (-2);
@@ -189,7 +189,7 @@ int CDBConn::Connect(const char *DBName)
     if (DBName != NULL && DBName[0] != '\0') {
         if (mysql_select_db(&Mysql, DBName) != 0) {
             db_err = mysql_errno(&Mysql);
-            snprintf(achErr, sizeof(achErr) - 1,
+            snprintf(achErr, sizeof(achErr),
                  "mysql select_db error: %s",
                  mysql_error(&Mysql));
             Close();
@@ -237,7 +237,7 @@ int CDBConn::do_ping(void)
     iRet = mysql_ping(&Mysql);
     if (iRet != 0) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1, "mysql ping error: %s",
+        snprintf(achErr, sizeof(achErr), "mysql ping error: %s",
              mysql_error(&Mysql));
         Close();
         return (-1);
@@ -256,7 +256,7 @@ int CDBConn::do_query(const char *SQL)
 
     if (mysql_real_query(&Mysql, SQL, strlen(SQL)) != 0) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1, "mysql query error: %s",
+        snprintf(achErr, sizeof(achErr), "mysql query error: %s",
              mysql_error(&Mysql));
         Close();
         return (-1);
@@ -275,7 +275,7 @@ int CDBConn::do_query(const char *DBName, const char *SQL)
 
     if (mysql_real_query(&Mysql, SQL, strlen(SQL)) != 0) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1, "mysql query error: %s",
+        snprintf(achErr, sizeof(achErr), "mysql query error: %s",
              mysql_error(&Mysql));
         Close();
         return (-1);
@@ -304,9 +304,9 @@ int64_t CDBConn::affected_rows()
     my_ulonglong RowNum;
 
     RowNum = mysql_affected_rows(&Mysql);
-    if (RowNum < 0) {
+    if (RowNum == (my_ulonglong)-1) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1,
+        snprintf(achErr, sizeof(achErr),
              "mysql affected rows error: %s", mysql_error(&Mysql));
         Close();
         return (-1);
@@ -334,7 +334,7 @@ int CDBConn::use_result()
     if (Res == NULL) {
         if (mysql_errno(&Mysql) != 0) {
             db_err = mysql_errno(&Mysql);
-            snprintf(achErr, sizeof(achErr) - 1,
+            snprintf(achErr, sizeof(achErr),
                  "mysql store result error: %s",
                  mysql_error(&Mysql));
             Close();
@@ -348,7 +348,7 @@ int CDBConn::use_result()
     res_num = mysql_num_rows(Res);
     if (res_num < 0) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1, "mysql num rows error: %s",
+        snprintf(achErr, sizeof(achErr), "mysql num rows error: %s",
              mysql_error(&Mysql));
         mysql_free_result(Res);
         Close();
@@ -364,7 +364,7 @@ int CDBConn::fetch_row()
     Row = mysql_fetch_row(Res);
     if (Row == NULL) {
         db_err = mysql_errno(&Mysql);
-        snprintf(achErr, sizeof(achErr) - 1,
+        snprintf(achErr, sizeof(achErr),
              "mysql fetch rows error: %s", mysql_error(&Mysql));
         free_result();
         Close();

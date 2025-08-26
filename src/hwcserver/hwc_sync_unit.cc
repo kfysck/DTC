@@ -22,9 +22,9 @@ int HwcSync::query_cold_server(
     DTCJobOperation* p_job,
     const DTCValue* key)
 {
-    p_job->set_request_key(key);
+    p_job->set_request_key(const_cast<DTCValue*>(key));
     p_job->set_request_code(DRequest::Get);
-    DTCFieldSet* p_dtc_field_set = p_job->request_fields();
+    const DTCFieldSet* p_dtc_field_set = p_job->request_fields();
     DELETE(p_dtc_field_set);
 
     DTCTableDefinition* p_dtc_tab_def = TableDefinitionManager::instance()->get_cur_table_def();
@@ -142,7 +142,7 @@ int HwcSync::Run()
             
             // key parse
             int i_key_size = 0;
-            char* p_key = result_m.BinaryValue("key", i_key_size);
+            const char* p_key = result_m.BinaryValue("key", i_key_size);
 
             DTCTableDefinition* p_dtc_tab_def = TableDefinitionManager::instance()->get_cur_table_def();
 
@@ -195,12 +195,12 @@ int HwcSync::Run()
                 decode_hotbin_result(&p_hot_result , o_hot_bin);
 
                 for (int i = 0; i < p_hot_result.total_rows(); i++) {
-                    RowValue* p_hot_raw = p_hot_result.fetch_row();
+                    const RowValue* p_hot_raw = p_hot_result.fetch_row();
                     
                     bool b_check = false;
                     // 冷数据库为base,只要冷数据库中没有热的，就插入
                     for (int j = 0; j < p_cold_res->total_rows(); j++) {
-                        RowValue* p_cold_raw = p_cold_res->fetch_row();
+                        const RowValue* p_cold_raw = p_cold_res->fetch_row();
                         if(p_hot_raw->Compare(*p_cold_raw ,
                                 p_fiedld_list , 
                                 p_dtc_tab_def->num_fields() + 1) == 0) {

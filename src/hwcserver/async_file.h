@@ -75,7 +75,7 @@ protected:
 	char _path[256];
 	volatile char *_map;
 
-	char _errmsg[256];
+	char _errmsg[8192];
 };
 
 enum ESyncStatus
@@ -272,7 +272,7 @@ private:
 	std::list < CAsyncFileImpl * >_asyncfiles;
 	CAsyncFileController _controller;
 	int _max;
-	char _errmsg[256];
+	char _errmsg[8192];
 };
 
 /*
@@ -295,7 +295,7 @@ public:
 private:
 	CAsyncFileImpl * _asyncfile;
 	CAsyncFileController _controller;
-	char _errmsg[256];
+	char _errmsg[8192];
 	int _processing;
 };
 
@@ -317,7 +317,7 @@ public:
 private:
 	CAsyncFileImpl * _asyncfile;
 	CAsyncFileController _controller;
-	char _errmsg[256];
+	char _errmsg[8192];
 };
 
 #endif

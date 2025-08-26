@@ -48,11 +48,11 @@ void InitState::HandleEvent()
     log4cplus_debug("dtc conf file:%s " , CComm::dtc_conf);
 	DTCConfig* p_dtc_config = new DTCConfig();
 	if (p_dtc_config->load_yaml_file(CComm::dtc_conf,  false) == -1)
-		return -1;
+		return;
 
 	DbConfig* p_db_Config = DbConfig::Load(p_dtc_config , 1);
 	if (p_db_Config == NULL)
-		return -1;
+		return;
     DTCTableDefinition* p_dtc_tab_def = p_db_Config->build_table_definition();
 
     TableDefinitionManager::instance()->set_cur_table_def(p_dtc_tab_def , 0);

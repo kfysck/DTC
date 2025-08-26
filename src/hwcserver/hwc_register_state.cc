@@ -33,7 +33,7 @@ void RegisterState::Enter()
     if (CComm::mysql_process_.check_table() != 0) {
         log4cplus_error("mysql field setting is not same as dtc");
         p_hwc_state_manager_->ChangeState(E_HWC_STATE_FAULT);
-        return -1;
+        return;
     }
 }
 
