@@ -47,7 +47,7 @@ class TreeDataProcess : public DataProcess {
 	UpdateMode update_mode_;
 	int64_t rows_count_;
 	int64_t dirty_rows_count_;
-	char err_message_[200];
+	char err_message_[4096];
 
 	unsigned int nodeSizeLimit; // -DEBUG-
 

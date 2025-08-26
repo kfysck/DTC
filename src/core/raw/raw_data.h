@@ -88,7 +88,7 @@ class RawData {
 	int auto_destory_;
 
 	RawData *p_reference_;
-	char err_message_[200];
+	char err_message_[4096];
 
 	DTCTableDefinition *table_definition_;
 

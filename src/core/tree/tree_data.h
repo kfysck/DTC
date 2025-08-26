@@ -122,7 +122,7 @@ class TreeData {
 	DTCTableDefinition *p_table_;
 	uint8_t index_depth_;
 	int table_index_;
-	char err_message_[100];
+	char err_message_[4096];
 
 	ALLOC_SIZE_T need_new_bufer_size; // 最近一次分配内存失败需要的大小
 	uint64_t affected_rows_;
