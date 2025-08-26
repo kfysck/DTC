@@ -29,8 +29,9 @@ MYSQL Protocol Definition, See more detail:
 */
 
 int net_send_ok(struct msg *smsg, struct conn *c_conn);
-int net_send_error(struct msg *smsg, struct msg *dmsg);
-int net_send_server_greeting(struct msg *smsg, struct msg *dmsg);
+int net_send_error(struct msg *smsg, struct conn *c_conn);
+int net_send_switch(struct msg *smsg, struct conn *c_conn);
+int net_send_server_greeting(struct conn* c, struct msg *smsg);
 
 struct msg *net_send_desc_dtctable(struct conn *c_conn);
 

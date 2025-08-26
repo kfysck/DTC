@@ -28,6 +28,12 @@
 #include "../da_core.h"
 #include "my_comm.h"
 #include "my_command.h"
+#include "my_parse.h"
+#include "my_protocol_classic.h"
+
+// Forward declaration for functions used before defined
+int my_get_command(uint8_t *input_raw_packet, uint32_t input_packet_length,
+                  struct msg *r, enum enum_server_command *cmd);
 
 #define MYSQL_HEADER_SIZE 4
 #define MAXPACKETSIZE (64 << 20)
@@ -83,7 +89,7 @@ void my_parse_req(struct msg *r)
 	if (p < b->last) {
 		if (b->last - p < MYSQL_HEADER_SIZE) {
 			log_error(
-				"receive size small than package header. id:%d",
+				"receive size small than package header. id:%lu",
 				r->id);
 			p = b->last;
 			goto end;
@@ -238,7 +244,7 @@ void my_parse_rsp(struct msg *r)
 		if(b->last - b->start < sizeof(struct DTC_HEADER_V2) + MYSQL_HEADER_SIZE)
 		{
 			log_error(
-					"receive size small than package header. id:%d",
+					"receive size small than package header. id:%lu",
 					r->id);
 			p = b->last;
 			goto error;
@@ -265,7 +271,7 @@ void my_parse_rsp(struct msg *r)
 				r->ismysql = 1;
 			}
 				
-			log_debug("pkt_nr:%d, peerid:%d, id:%d, admin:%d, packet_len:%d, db_len:%d", r->pkt_nr,
+			log_debug("pkt_nr:%d, peerid:%lu, id:%lu, admin:%d, packet_len:%d, db_len:%d", r->pkt_nr,
 					r->peerid, r->id, r->admin, packet_len, db_len);
 		}
 
@@ -483,7 +489,7 @@ int my_fragment(struct msg *r, uint32_t ncontinuum, struct msg_tqh *frag_msgq)
 	int status, i;
 	struct keypos *temp_kpos;
 	CValue val;
-	log_debug("key count:%d, cmd:%d", r->keyCount, r->cmd);
+	log_debug("key count:%lu, cmd:%d", r->keyCount, r->cmd);
 
 	if (r->cmd == MSG_NOP || r->admin != CMD_NOP) {
 		uint64_t randomkey = randomHashSeed++;
@@ -516,7 +522,7 @@ int my_fragment(struct msg *r, uint32_t ncontinuum, struct msg_tqh *frag_msgq)
 					log_error("decode value:%d", status);
 					return -1;
 				}
-				log_debug("val.u64:%d", val.u64);
+				log_debug("val.u64:%lu", val.u64);
 				r->idx = msg_backend_idx(r, (uint8_t *)&val.u64,
 							 sizeof(uint64_t));
 				log_debug("r->idx:%d", r->idx);
@@ -653,14 +659,14 @@ int my_get_route_key(uint8_t *sql, int sql_len, int *start_offset,
 	log_debug("sql: %s", str.data);
 	if(dbsession && strlen(dbsession))
 	{
-		log_debug("dbsession len:%d, dbsession: %s", strlen(dbsession), dbsession);
+		log_debug("dbsession len:%zu, dbsession: %s", strlen(dbsession), dbsession);
 	}
 
 	char strkey[1024] = {0};
 	memset(strkey, 0, 1024);
 
 	//agent sql route, rule engine
-	layer = rule_sql_match(str.data, ostr.data, dbsession, &strkey, &r->keytype);
+	layer = rule_sql_match(str.data, ostr.data, dbsession, strkey, (int*)&r->keytype);
 	log_debug("rule layer: %d", layer);
 
 	if(layer != 1)
@@ -692,7 +698,7 @@ int my_get_route_key(uint8_t *sql, int sql_len, int *start_offset,
 		for (; i < str.len; i++) {
 			if (str.len - i >= strlen(strkey)) {
 				log_debug(
-					"key: %s, key len:%d, str.len:%d i:%d dtc_key_len:%d str.data + i:%s ", strkey, strlen(strkey),
+					"key: %s, key len:%zu, str.len:%d i:%d dtc_key_len:%zu str.data + i:%s ", strkey, strlen(strkey),
 					str.len, i, strlen(strkey), str.data + i);
 				if (da_strncmp(str.data + i, strkey, strlen(strkey)) == 0) 
 				{

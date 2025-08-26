@@ -186,7 +186,7 @@ void rsp_recv_done(struct context *ctx, struct conn *conn, struct msg *msg,
 
 	struct rbnode tnode;
 	tnode.key = msg->peerid; //peer msg_id for search,get from package
-	log_debug("rbtree node key: %"PRIu64", id:%d, peerid:%d, tree:%p %d %d",tnode.key, msg->id, msg->peerid, &conn->msg_tree, conn->msg_tree.root->key, conn->msg_tree.sentinel->key);
+	log_debug("rbtree node key: %"PRIu64", id:%lu, peerid:%lu, tree:%p %"PRIu64" %"PRIu64"",tnode.key, msg->id, msg->peerid, &conn->msg_tree, conn->msg_tree.root->key, conn->msg_tree.sentinel->key);
 	tarnode = rbtree_search(&conn->msg_tree, &tnode);
 	if (tarnode == NULL) { //node has been deleted by timeout
 		log_debug("rsp msg id: %"PRIu64" peerid :%"PRIu64" search peer msg error,msg is not in the tree",
