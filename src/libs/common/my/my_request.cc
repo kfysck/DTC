@@ -31,7 +31,7 @@ bool MyRequest::do_mysql_protocol_parse()
 		return false;
 	}
 
-	int input_packet_length = uint_trans_3(p);
+	int input_packet_length = uint_trans_3(reinterpret_cast<const uchar*>(p));
 	log4cplus_debug("uint_trans_3:0x%x 0x%x 0x%x, len:%d", p[0], p[1], p[2],
 			input_packet_length);
 	p += 3;
@@ -155,7 +155,9 @@ bool MyRequest::get_key(DTCValue *key, char *key_name)
 	int t = m_result.getStatement(0)->type();
 
 	if (hsql::StatementType::kStmtInsert == t) {
-		hsql::InsertStatement *stmt = get_result()->getStatement(0);
+		hsql::InsertStatement *stmt = 
+			const_cast<hsql::InsertStatement*>(
+				static_cast<const hsql::InsertStatement*>(get_result()->getStatement(0)));
 		if(stmt->columns == NULL)
 		{
 			int i = 0;
@@ -204,15 +206,18 @@ bool MyRequest::get_key(DTCValue *key, char *key_name)
 	} else {
 		if (hsql::StatementType::kStmtUpdate == t) {
 			hsql::UpdateStatement *stmt =
-				get_result()->getStatement(0);
+				const_cast<hsql::UpdateStatement*>(
+					static_cast<const hsql::UpdateStatement*>(get_result()->getStatement(0)));
 			where = stmt->where;
 		} else if (hsql::StatementType::kStmtSelect == t) {
 			hsql::SelectStatement *stmt =
-				get_result()->getStatement(0);
+				const_cast<hsql::SelectStatement*>(
+					static_cast<const hsql::SelectStatement*>(get_result()->getStatement(0)));
 			where = stmt->whereClause;
 		} else if (hsql::StatementType::kStmtDelete == t) {
 			hsql::DeleteStatement *stmt =
-				get_result()->getStatement(0);
+				const_cast<hsql::DeleteStatement*>(
+					static_cast<const hsql::DeleteStatement*>(get_result()->getStatement(0)));
 			where = stmt->expr;
 		}
 
@@ -251,7 +256,9 @@ uint32_t MyRequest::get_limit_start()
 	if (t != hsql::StatementType::kStmtSelect) {
 		return 0;
 	}
-	hsql::SelectStatement *stmt = get_result()->getStatement(0);
+	hsql::SelectStatement *stmt = 
+		const_cast<hsql::SelectStatement*>(
+			static_cast<const hsql::SelectStatement*>(get_result()->getStatement(0)));
 	LimitDescription* limit = stmt->limit;
 	if(limit)
 	{
@@ -272,17 +279,23 @@ uint32_t MyRequest::get_limit_count()
 	int t = m_result.getStatement(0)->type();
 	LimitDescription* limit;
 	if (t == hsql::StatementType::kStmtSelect) {
-		hsql::SelectStatement *stmt = get_result()->getStatement(0);
+		hsql::SelectStatement *stmt = 
+			const_cast<hsql::SelectStatement*>(
+				static_cast<const hsql::SelectStatement*>(get_result()->getStatement(0)));
 		limit = stmt->limit;
 	}
 	else if(t == hsql::StatementType::kStmtUpdate)
 	{
-		hsql::UpdateStatement *stmt = get_result()->getStatement(0);
+		hsql::UpdateStatement *stmt = 
+			const_cast<hsql::UpdateStatement*>(
+				static_cast<const hsql::UpdateStatement*>(get_result()->getStatement(0)));
 		limit = stmt->limit;
 	}
 	else if(t == hsql::StatementType::kStmtDelete)
 	{
-		hsql::DeleteStatement *stmt = get_result()->getStatement(0);
+		hsql::DeleteStatement *stmt = 
+			const_cast<hsql::DeleteStatement*>(
+				static_cast<const hsql::DeleteStatement*>(get_result()->getStatement(0)));
 		limit = stmt->limit;
 	}
 	else
@@ -308,7 +321,9 @@ uint32_t MyRequest::get_need_num_fields()
 	if (t != hsql::StatementType::kStmtSelect) {
 		return 0;
 	}
-	hsql::SelectStatement *stmt = get_result()->getStatement(0);
+	hsql::SelectStatement *stmt = 
+		const_cast<hsql::SelectStatement*>(
+			static_cast<const hsql::SelectStatement*>(get_result()->getStatement(0)));
 	std::vector<hsql::Expr *> *selectList = stmt->selectList;
 	log4cplus_debug("select size:%d", selectList->size());
 	if(selectList->size() == 1 && (*selectList)[0]->type == kExprStar)
@@ -321,10 +336,14 @@ uint32_t MyRequest::get_update_num_fields()
 {
 	int t = m_result.getStatement(0)->type();
 	if (hsql::StatementType::kStmtUpdate == t) {
-		hsql::UpdateStatement *stmt = get_result()->getStatement(0);
+		hsql::UpdateStatement *stmt = 
+			const_cast<hsql::UpdateStatement*>(
+				static_cast<const hsql::UpdateStatement*>(get_result()->getStatement(0)));
 		return stmt->updates->size();
 	} else if (hsql::StatementType::kStmtInsert == t) {
-		hsql::InsertStatement *stmt = get_result()->getStatement(0);
+		hsql::InsertStatement *stmt = 
+			const_cast<hsql::InsertStatement*>(
+				static_cast<const hsql::InsertStatement*>(get_result()->getStatement(0)));
 		return stmt->values->size();
 	}
 
@@ -340,7 +359,9 @@ std::vector<std::string> MyRequest::get_need_array()
 		return need;
 	}
 
-	hsql::SelectStatement *stmt = get_result()->getStatement(0);
+	hsql::SelectStatement *stmt = 
+		const_cast<hsql::SelectStatement*>(
+			static_cast<const hsql::SelectStatement*>(get_result()->getStatement(0)));
 	std::vector<hsql::Expr *> *selectList = stmt->selectList;
 
 	if(selectList->size() == 1 && (*selectList)[0]->type == kExprStar)
@@ -369,23 +390,28 @@ char* MyRequest::get_table_name()
 	int t = m_result.getStatement(0)->type();
 
 	if (hsql::StatementType::kStmtInsert == t) {
-		hsql::InsertStatement *stmt = get_result()->getStatement(0);
+		hsql::InsertStatement *stmt = 
+			const_cast<hsql::InsertStatement*>(
+				static_cast<const hsql::InsertStatement*>(get_result()->getStatement(0)));
 		if(stmt && stmt->tableName)
 			return stmt->tableName;
 	} else {
 		if (hsql::StatementType::kStmtUpdate == t) {
 			hsql::UpdateStatement *stmt =
-				get_result()->getStatement(0);
+				const_cast<hsql::UpdateStatement*>(
+					static_cast<const hsql::UpdateStatement*>(get_result()->getStatement(0)));
 			if(stmt && stmt->table)
 				return stmt->table->name;
 		} else if (hsql::StatementType::kStmtSelect == t) {
 			hsql::SelectStatement *stmt =
-				get_result()->getStatement(0);
+				const_cast<hsql::SelectStatement*>(
+					static_cast<const hsql::SelectStatement*>(get_result()->getStatement(0)));
 			if(stmt && stmt->fromTable)
 				return stmt->fromTable->name;
 		} else if (hsql::StatementType::kStmtDelete == t) {
 			hsql::DeleteStatement *stmt =
-				get_result()->getStatement(0);
+				const_cast<hsql::DeleteStatement*>(
+					static_cast<const hsql::DeleteStatement*>(get_result()->getStatement(0)));
 			if(stmt)
 				return stmt->tableName;
 		}

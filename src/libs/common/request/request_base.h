@@ -160,9 +160,13 @@ template <typename T, int max_count = 10> class TaskReplyList {
 	}
 	inline void copy_reply_path(TaskReplyList<T, 10> *org)
 	{
-		memcpy(proc, org->proc,
-		       sizeof(JobAnswerInterface<T> *) * max_count);
-		count = org->count;
+		if (org && org->proc) {
+			// Copy only the minimum between source and destination sizes
+			int copy_count = (10 < max_count) ? 10 : max_count;
+			memcpy(proc, org->proc,
+			       sizeof(JobAnswerInterface<T> *) * copy_count);
+		}
+		count = org ? org->count : 0;
 	}
 	inline int Push(JobAnswerInterface<T> *p)
 	{

@@ -159,11 +159,28 @@ DTCTableDefinition *TableDefinitionManager::load_table(const char *file)
 	lseek(fd, 0L, SEEK_SET);
 	len = lseek(fd, 0L, SEEK_END);
 	lseek(fd, 0L, SEEK_SET);
+	
+	// Check for valid file size
+	if (len <= 0 || len > 10*1024*1024) { // Max 10MB file size
+		close(fd);
+		return ret;
+	}
+	
 	_buf = (char *)MALLOC(len + 1);
 	buf = (char *)MALLOC(len + 1);
-	readlen = read(fd, _buf, len);
-	if (readlen < 0 || readlen == 0)
+	if (!_buf || !buf) {
+		close(fd);
+		FREE_IF(_buf);
+		FREE_IF(buf);
 		return ret;
+	}
+	readlen = read(fd, _buf, len);
+	if (readlen < 0 || readlen == 0) {
+		close(fd);
+		FREE_IF(_buf);
+		FREE_IF(buf);
+		return ret;
+	}
 	_buf[len] = '\0';
 	close(fd);
 	// should copy one, as load_buffered_table will modify buf

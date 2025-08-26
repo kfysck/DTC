@@ -12,6 +12,8 @@ time_t convert_time_interval(time_t val, int type)
         return val * 60 * 60;
     else if(type == kDatetimeDay)
         return val * 60 * 60 * 24;
+    else
+        return val; // default case
 }
 
 std::string fun_date_sub(std::vector<Expr*>* elist)

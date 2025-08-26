@@ -30,7 +30,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
   
   # Common flags for all GCC versions
-  add_compile_options(-fpermissive)
+  add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fpermissive>")
   add_compile_options(-Wno-builtin-macro-redefined)
   
   # Use old ABI for compatibility with bundled libraries

@@ -122,7 +122,9 @@ int DTCConfig::load_yaml_file(const char *fn, bool bakconfig)
     if (bakconfig) {
         char bak_config[1024];
         int err = 0;
-        system("mkdir -p ../stat/");
+        if (system("mkdir -p ../stat/") == -1) {
+            // Handle mkdir error if needed
+        }
         snprintf(bak_config, sizeof(bak_config),
              "cp %s ../stat/", fn);
         if (err == 0)

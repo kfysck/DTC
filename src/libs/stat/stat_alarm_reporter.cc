@@ -60,7 +60,9 @@ bool StatAlarmReporter::set_stat_client(StatClient *stat_client)
 void StatAlarmReporter::init_module_id()
 {
 	char buf[1024];
-	getcwd(buf, sizeof(buf));
+	if (getcwd(buf, sizeof(buf)) == NULL) {
+		buf[0] = '\0'; // fallback if getcwd fails
+	}
 	ddw_module_id_ = parse_module_id(std::string(buf));
 }
 

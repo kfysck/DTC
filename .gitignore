@@ -6,3 +6,4 @@ settings.json
 *.o
 .dep*
 build/
+.joycode

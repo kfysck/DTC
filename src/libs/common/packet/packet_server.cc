@@ -649,7 +649,7 @@ void encode_mysql_header(BufferChain *r, int len, uint8_t pkt_num)
 {
 	//Packet Lenght + Packet Number
 	char t[3];
-	int_conv_3(t, len);
+	int_conv_3(reinterpret_cast<uchar*>(t), len);
 	memcpy(r->data, t, 3);
 	*(r->data + 3) = pkt_num;
 }
@@ -737,11 +737,11 @@ int encode_set_field(char *buf, my_result_set_field *sf)
 
 	//charset number
 	*p++ = 0x0c;
-	int2store_big_endian(p, sf->charset_number);
+	int2store_big_endian(reinterpret_cast<uchar*>(p), sf->charset_number);
 	p += sizeof(sf->charset_number);
 
 	//length
-	int4store_big_endian(p, sf->length);
+	int4store_big_endian(reinterpret_cast<uchar*>(p), sf->length);
 	p += sizeof(sf->length);
 
 	//type
@@ -749,7 +749,7 @@ int encode_set_field(char *buf, my_result_set_field *sf)
 	p += sizeof(sf->type);
 
 	//flags
-	int2store_big_endian(p, sf->flags);
+	int2store_big_endian(reinterpret_cast<uchar*>(p), sf->flags);
 	p += sizeof(sf->flags);
 
 	//decimals
@@ -822,6 +822,8 @@ int build_field_type(int type)
 		return MYSQL_TYPE_VAR_STRING;
 	case DField::Binary:
 		return MYSQL_TYPE_VAR_STRING;
+	default:
+		return MYSQL_TYPE_VAR_STRING; // default case
 	}
 }
 
@@ -1003,7 +1005,7 @@ BufferChain *encode_row_data(DtcJob *job, BufferChain *bc, uint8_t &pkt_nr)
 			int id = tdef->field_id(result_field[j].c_str());
 			DTCValue* v;
 			if (0 == id) {
-				v = job->request_key();
+				v = const_cast<DTCValue*>(job->request_key());
 			} else {
 				v = pstRow->field_value(id);
 			}
@@ -1061,7 +1063,7 @@ BufferChain *encode_row_data(DtcJob *job, BufferChain *bc, uint8_t &pkt_nr)
 			int id = tdef->field_id(result_field[j].c_str());
 			DTCValue* v;
 			if (0 == id) {
-				v = job->request_key();
+				v = const_cast<DTCValue*>(job->request_key());
 			} else {
 				v = pstRow->field_value(id);
 			}
@@ -1142,7 +1144,7 @@ BufferChain *Packet::encode_mysql_error(DtcJob *job, std::string errmsg, int mye
 	bc = (BufferChain *)MALLOC(packet_len);
 	BufferChain *r = bc;
 	if (r == NULL) {
-		return -ENOMEM;
+		return NULL;
 	}
 	r->totalBytes = packet_len - sizeof(BufferChain);
 	encode_mysql_header(r, sizeof(buf) + errmsg.length(), pkt_nr);
@@ -1173,7 +1175,7 @@ BufferChain *Packet::encode_mysql_ok(DtcJob *job, int affected_rows)
 	bc = (BufferChain *)MALLOC(packet_len);
 	BufferChain *r = bc;
 	if (r == NULL) {
-		return -ENOMEM;
+		return NULL;
 	}
 	r->totalBytes = packet_len - sizeof(BufferChain);
 	encode_mysql_header(r, sizeof(buf), pkt_nr);
@@ -1223,6 +1225,8 @@ int net_send_ok(int affectedRow)
 {
 	uint8_t buf[100] = { 0x00, (uint8_t)affectedRow, 0x00, 0x02, 0x00, 0x00,
 			     0x00 };
+	// TODO: Implement actual network send logic
+	return 0; // Success
 }
 
 int is_desc_tables(DtcJob *job , char*& p_filepath)
@@ -1237,7 +1241,7 @@ int is_desc_tables(DtcJob *job , char*& p_filepath)
 	uint32_t ui_size = (sizeof(meta_selections) / sizeof(MetaSelections));
 	for (int i = 0; i < ui_size; i++) {
 		if (sql == string(meta_selections[i].p_req_string)) {
-			p_filepath = meta_selections[i].p_val;
+			p_filepath = const_cast<char*>(meta_selections[i].p_val);
 			return meta_selections[i].i_select_type; 
 		}
 	}
@@ -1552,7 +1556,7 @@ int Packet::encode_result_v2(DtcJob &job, int mtu, uint32_t ts)
 	memcpy(p, &dtc_header, sizeof(dtc_header));
 	p += sizeof(dtc_header);
 	if (p - (char *)v->iov_base != sizeof(dtc_header))
-		fprintf(stderr, "%s(%d): BAD ENCODER len=%ld must=%d\n",
+		fprintf(stderr, "%s(%d): BAD ENCODER len=%ld must=%zu\n",
 			__FILE__, __LINE__, (long)(p - (char *)v->iov_base),
 			sizeof(dtc_header));
 

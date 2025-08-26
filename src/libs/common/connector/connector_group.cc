@@ -167,7 +167,7 @@ int ConnectorGroup::WriteHBLog(
     int i_check)
 {
     log4cplus_info("WriteHBLog start");
-    std::string s_value = p_job->mr.get_sql();
+    std::string s_value = const_cast<DTCJobOperation*>(p_job)->mr.get_sql();
     int start_pos = s_value.find("WITHOUT@@");
     if (start_pos != std::string::npos) {
         log4cplus_info("no need write hb log");
@@ -212,7 +212,7 @@ int ConnectorGroup::WriteHBLog(
         // local file system ,same endian
         HwcBinlogCont o_hwc_bin_cont;
         o_hwc_bin_cont.i_sql_len = s_value.length();
-        o_hwc_bin_cont.p_sql = s_value.data();
+        o_hwc_bin_cont.p_sql = const_cast<char*>(s_value.data());
         o_hwc_bin_cont.i_check_flag = i_check;
 
         if (i_check) {

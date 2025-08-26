@@ -45,7 +45,8 @@ template <typename T, typename C> class ThreadingPipeQueue : EpollBase {
 	inline void Wake()
 	{
 		char c = 0;
-		write(wakefd, &c, 1);
+		ssize_t result = write(wakefd, &c, 1);
+		(void)result; // Silence unused result warning
 	}
 	inline void Discard()
 	{

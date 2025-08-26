@@ -67,7 +67,7 @@ extern "C" int get_statement_value(char* str, int len, const char* strkey, int* 
 			switch (stmt->values->at(i)->type) 
             {
                 case hsql::ExprType::kExprLiteralInt:
-                    sprintf(sztmp, "%d", stmt->values->at(i)->ival);
+                    sprintf(sztmp, "%ld", stmt->values->at(i)->ival);
                     strsql = str;
                     pos = strsql.find(sztmp);
                     if(pos != string::npos)
@@ -116,7 +116,7 @@ extern "C" int get_statement_value(char* str, int len, const char* strkey, int* 
                     char sztmp[100] = {0};
                     switch (stmt->values->at(i)->type) {
                     case hsql::ExprType::kExprLiteralInt:
-                        sprintf(sztmp, "%d", stmt->values->at(i)->ival);
+                        sprintf(sztmp, "%ld", stmt->values->at(i)->ival);
                         strsql = str;
                         pos = strsql.find(sztmp);
                         if(pos != string::npos)
@@ -159,6 +159,9 @@ extern "C" int get_statement_value(char* str, int len, const char* strkey, int* 
     }
     else
         return -1;
+    
+    // Should never reach here, but just in case
+    return -1;
 }
 
 std::string get_table_with_db(const char* sessiondb, const char* sql)
@@ -599,7 +602,7 @@ extern "C" int rule_sql_match(const char* szsql, const char* osql, const char* d
             log4cplus_debug("name: %s, type: %d", stmt->columns->at(i), stmt->values->at(i)->type);
             if(stmt->values->at(i)->type == hsql::ExprType::kExprLiteralInt)
             {
-                sprintf(sztmp, "%lld", stmt->values->at(i)->ival);
+                sprintf(sztmp, "%ld", stmt->values->at(i)->ival);
                 tempsql += sztmp;
             }
             else if(stmt->values->at(i)->type == hsql::ExprType::kExprLiteralFloat)
