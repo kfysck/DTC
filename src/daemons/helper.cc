@@ -92,7 +92,7 @@ void WatchDogHelper::exec()
 		new Thread(watchdog_object_name_, Thread::ThreadTypeProcess);
 	helperThread->initialize_thread();
 	char filedir[260] = {0};
-	char filepath[260] = {0};
+	char filepath[512] = {0};
 	char fn[260] = {0};
 	snprintf(fn, sizeof(fn), "/proc/%d/exe", getpid());
 	int rv = readlink(fn, filedir, sizeof(filedir) - 1);
@@ -103,7 +103,7 @@ void WatchDogHelper::exec()
 		rv = str.rfind('/');
 		strcpy(filedir, str.substr(0, rv).c_str());
 	}
-	sprintf(filepath, "%s/%s", filedir, connector_name[type_]);
+	snprintf(filepath, sizeof(filepath), "%s/%s", filedir, connector_name[type_]);
 	log4cplus_info("connector path:%s", filepath);
 	argv[0] = filepath;
 	execv(argv[0], argv);

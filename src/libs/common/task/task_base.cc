@@ -163,7 +163,7 @@ void DtcJob::decode_stream(SimpleReceiver &receiver)
 	return;
 }
 
-int8_t DtcJob::select_version(char *packetIn, int packetLen)
+int8_t DtcJob::select_version(const char *packetIn, int packetLen)
 {
 	int8_t ver = 0;
 	log4cplus_debug("select version entry.");
@@ -205,7 +205,7 @@ int8_t DtcJob::select_version(char *packetIn, int packetLen)
 	return -3;
 }
 
-void DtcJob::decode_mysql_packet(char *packetIn, int packetLen, int type)
+void DtcJob::decode_mysql_packet(const char *packetIn, int packetLen, int type)
 {
 	if(_client_owner == NULL)
 	{
@@ -213,7 +213,7 @@ void DtcJob::decode_mysql_packet(char *packetIn, int packetLen, int type)
 		return ;
 	}
 
-	char* p = packetIn;
+	char* p = const_cast<char*>(packetIn);
 	p += 3;
 	this->mr.pkt_nr = (uint8_t)(*p); // mysql sequence id
 	log4cplus_debug("pkt_nr:%d", this->mr.pkt_nr);
@@ -234,14 +234,14 @@ void DtcJob::decode_mysql_packet(char *packetIn, int packetLen, int type)
 			return;
 		}
 
-		enum enum_server_command cmd = (enum enum_server_command)(uchar)(packetIn+sizeof(MYSQL_HEADER_SIZE));
+		enum enum_server_command cmd = (enum enum_server_command)*(reinterpret_cast<const uchar*>(packetIn+sizeof(MYSQL_HEADER_SIZE)));
 		if (cmd == COM_PING) 
 		{
 			log4cplus_debug("cmd PING.");
 			return;
 		}
 
-		mr.set_packet_info(packetIn, packetLen);
+		mr.set_packet_info(const_cast<char*>(packetIn), packetLen);
 
 		struct timeval tv1, tv2;
 		gettimeofday(&tv1, NULL);
@@ -609,7 +609,9 @@ int get_compare_symbol(uint8_t opType)
 	else if(opType == kOpGreater)
 		return DField::GT;		
 	else if(opType == kOpGreaterEq)
-		return DField::GE;							
+		return DField::GE;
+	else
+		return DField::EQ; // default case							
 }
 
 int DtcJob::decode_request_v2(MyRequest *mr)
@@ -627,7 +629,7 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 
 	//2.requestInfo
 	static DTCValue key;
-	if (mr->get_key(&key, table_definition()->key_name())) {
+	if (mr->get_key(&key, const_cast<char*>(table_definition()->key_name()))) {
 		requestInfo.set_key(key);
 		set_request_key(&key);
 	}
@@ -681,11 +683,13 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 	if (type != hsql::StatementType::kStmtInsert) {
 		if (type == hsql::StatementType::kStmtUpdate) {
 			hsql::UpdateStatement *stmt =
-				mr->get_result()->getStatement(0);
+				const_cast<hsql::UpdateStatement*>(
+					static_cast<const hsql::UpdateStatement*>(mr->get_result()->getStatement(0)));
 			where = stmt->where;
 		} else if (type == hsql::StatementType::kStmtDelete) {
 			hsql::DeleteStatement *stmt =
-				mr->get_result()->getStatement(0);
+				const_cast<hsql::DeleteStatement*>(
+					static_cast<const hsql::DeleteStatement*>(mr->get_result()->getStatement(0)));
 			where = stmt->expr;
 
 			if (stmt->schema != NULL) {
@@ -696,7 +700,8 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 			}
 		} else if (type == hsql::StatementType::kStmtSelect) {
 			hsql::SelectStatement *stmt =
-				mr->get_result()->getStatement(0);
+				const_cast<hsql::SelectStatement*>(
+					static_cast<const hsql::SelectStatement*>(mr->get_result()->getStatement(0)));
 			where = stmt->whereClause;
 		} else {
 			log4cplus_error("StatementType error: %d", type);
@@ -732,7 +737,7 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 					exprList.at(i)
 						->expr2
 						->type /*DField::Unsigned*/,
-					exprList.at(i)->expr->getName());
+					const_cast<char*>(exprList.at(i)->expr->getName()));
 				if (rtype == -1) {
 					temp--;
 					continue;
@@ -786,7 +791,8 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 		int t = mr->get_result()->getStatement(0)->type();
 		if (hsql::StatementType::kStmtUpdate == t) {
 			hsql::UpdateStatement *stmt =
-				mr->get_result()->getStatement(0);
+				const_cast<hsql::UpdateStatement*>(
+					static_cast<const hsql::UpdateStatement*>(mr->get_result()->getStatement(0)));
 			
 			if (stmt->table->schema != NULL) {
 				mr->m_sql.replace(stmt->table->st_start_idx ,
@@ -833,7 +839,8 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 
 		} else if (hsql::StatementType::kStmtInsert == t) {
 			hsql::InsertStatement *stmt =
-				mr->get_result()->getStatement(0);
+				const_cast<hsql::InsertStatement*>(
+					static_cast<const hsql::InsertStatement*>(mr->get_result()->getStatement(0)));
 			if (stmt->schema != NULL) {
 				mr->m_sql.replace(stmt->st_start_idx ,
 					 stmt->st_end_idx - stmt->st_start_idx,
@@ -850,7 +857,7 @@ int DtcJob::decode_request_v2(MyRequest *mr)
 				}
 				count = stmt->values->size();
 				for (int i = 0; i < count; i++) {
-					char* field_name = table_definition()->field_name(i);
+					char* field_name = const_cast<char*>(table_definition()->field_name(i));
 					int rtype = build_field_type_r(
 						stmt->values->at(i)->type,
 						field_name);

@@ -106,8 +106,12 @@ int FileBackedKeySet::Open()
 	}
 
 	//discard all content if any
-	ftruncate(m_fd, 0);
-	ftruncate(m_fd, INIT_FILE_SIZE);
+	if (ftruncate(m_fd, 0) == -1) {
+		// Handle error - could close fd and return
+	}
+	if (ftruncate(m_fd, INIT_FILE_SIZE) == -1) {
+		// Handle error - could close fd and return
+	}
 
 	m_base = (char *)mmap(NULL, INIT_FILE_SIZE, PROT_READ | PROT_WRITE,
 			      MAP_SHARED, m_fd, 0);

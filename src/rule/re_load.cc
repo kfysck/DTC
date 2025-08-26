@@ -83,6 +83,7 @@ int traverse_sub_ast(hsql::Expr* where, vector<hsql::Expr*>* v_expr)
         log4cplus_debug("type: %d, %d, %s", where->type, where->opType, where->expr->name);
         v_expr->push_back(where);
     }
+    return 0;
 }
 
 int traverse_ast(hsql::Expr* where, vector<vector<hsql::Expr*> >* expr_rules)
@@ -156,16 +157,30 @@ std::string load_dtc_yaml_buffer(int mid)
 	lseek(fd, 0L, SEEK_SET);
 	i_length = lseek(fd, 0L, SEEK_END);
 	lseek(fd, 0L, SEEK_SET);
+	
+	// Check for valid file size
+	if (i_length <= 0 || i_length > 1024*1024) { // Max 1MB file size
+		close(fd);
+		return "";
+	}
+	
 	// Attention: memory init here ,need release outside
 	file = (char *)malloc(i_length + 1);
-	int readlen = read(fd, file, i_length);
-	if (readlen < 0 || readlen == 0)
+	if (!file) {
+		close(fd);
 		return "";
+	}
+	int readlen = read(fd, file, i_length);
+	if (readlen < 0 || readlen == 0) {
+		close(fd);
+		free(file);
+		return "";
+	}
 	file[i_length] = '\0';
 	close(fd);
 	i_length++; // add finish flag length
     std::string res = file;
-    delete file;
+    free(file); // Use free() since we used malloc()
     return res;
 }
 

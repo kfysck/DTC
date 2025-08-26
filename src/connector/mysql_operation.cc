@@ -125,8 +125,8 @@ static CMysqlField astField[] = { { "tinyint", 1, 1 },
                       { "text", 4, 65535 },
                       { "mediumblob", 5, 16777215 },
                       { "mediumtext", 4, 16777215 },
-                      { "longblob", 5, 4294967295U },
-                      { "longtext", 4, 4294967295U },
+                      { "longblob", 5, (int)4294967295U },
+                      { "longtext", 4, (int)4294967295U },
                       { "enum", 4, 255 },
                       { "set", 2, 8 } };
 
@@ -229,8 +229,6 @@ static int get_field_type(const char *szType, int &i_type,
 
     return (0);
 }
-
-static 
 
 int ConnectorProcess::create_tab_if_not_exist()
 {

@@ -301,7 +301,10 @@ void delete_all_old_yaml()
     cmd += ROOT_PATH;
     cmd += "config-*.yaml";
     log4cplus_info("cmd: %s", cmd.c_str());
-    system(cmd.c_str());
+    int result = system(cmd.c_str());
+    if (result != 0) {
+        log4cplus_error("Failed to execute command: %s, return code: %d", cmd.c_str(), result);
+    }
 }
 
 void dump_authority()
@@ -352,9 +355,9 @@ int main(int argc, char* argv[])
 		int n = strncmp(drt->d_name, prefix, l);
 		if (n == 0) {
 			YAML::Node dtc_config;
-            char filepath[260] = {0};
+            char filepath[512] = {0};
             try {
-                sprintf(filepath, "%s%s", conf_dir, drt->d_name);
+                snprintf(filepath, sizeof(filepath), "%s%s", conf_dir, drt->d_name);
                 log4cplus_info("loading file: %s", filepath);
                 dtc_config = YAML::LoadFile(filepath);
             } catch (const YAML::Exception &e) {

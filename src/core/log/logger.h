@@ -24,7 +24,7 @@
 #include "log/log.h"
 #include "journal_id.h"
 
-#define MAX_PATH_NAME_LEN 256
+#define MAX_PATH_NAME_LEN 8192
 
 /*
  * DTC binlog base class(file)

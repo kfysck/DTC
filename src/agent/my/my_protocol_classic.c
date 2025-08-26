@@ -1,6 +1,7 @@
 #include "my_protocol_classic.h"
 #include "my_com_data.h"
 #include "da_conn.h"
+#include "my_parse.h"
 
 static inline char *strend(char *s)
 {

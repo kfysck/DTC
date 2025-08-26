@@ -201,7 +201,7 @@ class RowValue : public TableReference {
 	}
 
 	/*Compare tow RowValue by FieldIDList*/
-	int Compare(const RowValue &rv, uint8_t *fieldIDList, uint8_t num);
+	int Compare(const RowValue &rv, uint8_t *fieldIDList, uint8_t num) const;
 	DTCValue &operator[](int n)
 	{
 		return value[n];

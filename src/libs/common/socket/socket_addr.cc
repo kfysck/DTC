@@ -682,7 +682,7 @@ int SocketAddress::Equal(const struct sockaddr_in6 *addr, int len,
 int SocketAddress::Equal(const char *path) const
 {
 	SocketAddress temp;
-	if (temp.set_address(path, 0) < 0)
+	if (temp.set_address(path, 0) != NULL)
 		return 0;
 	return Equal(&temp);
 }
@@ -690,14 +690,14 @@ int SocketAddress::Equal(const char *path) const
 int SocketAddress::Equal(const char *path, int port, int type) const
 {
 	SocketAddress temp;
-	if (temp.set_address(path, port, type) < 0)
+	if (temp.set_address(path, port, type) != NULL)
 		return 0;
 	return Equal(&temp);
 }
 int SocketAddress::Equal(const char *path, const char *port) const
 {
 	SocketAddress temp;
-	if (temp.set_address(path, port) < 0)
+	if (temp.set_address(path, port) != NULL)
 		return 0;
 	return Equal(&temp);
 }
@@ -815,7 +815,7 @@ int SocketAddress::Match(const SocketAddress *that) const
 int SocketAddress::Match(const char *path, int port, int type) const
 {
 	SocketAddress temp;
-	if (temp.set_address(path, port, type) < 0)
+	if (temp.set_address(path, port, type) != NULL)
 		return 0;
 	return Match(&temp);
 }
@@ -823,7 +823,7 @@ int SocketAddress::Match(const char *path, int port, int type) const
 int SocketAddress::Match(const char *path) const
 {
 	SocketAddress temp;
-	if (temp.set_address(path, 0) < 0)
+	if (temp.set_address(path, 0) != NULL)
 		return 0;
 	return Match(&temp);
 }
@@ -831,7 +831,7 @@ int SocketAddress::Match(const char *path) const
 int SocketAddress::Match(const char *path, const char *port) const
 {
 	SocketAddress temp;
-	if (temp.set_address(path, port) < 0)
+	if (temp.set_address(path, port) != NULL)
 		return 0;
 	return Match(&temp);
 }
@@ -840,7 +840,7 @@ int SocketAddress::Match(const struct sockaddr_un *addr, int len,
 			 int type) const
 {
 	SocketAddress temp;
-	if (temp.set_address(addr, len, type) < 0)
+	if (temp.set_address(addr, len, type) != NULL)
 		return 0;
 	return Match(&temp);
 }
@@ -848,7 +848,7 @@ int SocketAddress::Match(const struct sockaddr_in *addr, int len,
 			 int type) const
 {
 	SocketAddress temp;
-	if (temp.set_address(addr, len, type) < 0)
+	if (temp.set_address(addr, len, type) != NULL)
 		return 0;
 	return Match(&temp);
 }
@@ -857,7 +857,7 @@ int SocketAddress::Match(const struct sockaddr_in6 *addr, int len,
 			 int type) const
 {
 	SocketAddress temp;
-	if (temp.set_address(addr, len, type) < 0)
+	if (temp.set_address(addr, len, type) != NULL)
 		return 0;
 	return Match(&temp);
 }

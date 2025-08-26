@@ -675,11 +675,11 @@ int ConnectorClient::client_notify_helper_check()
                 TableDefinitionManager::instance()->get_cur_table_def());
         check_job->Copy(*job);
         check_job->set_request_code(DRequest::Get);
-        check_job->set_request_key(job->request_key());
+        check_job->set_request_key(const_cast<DTCValue*>(job->request_key()));
         check_job->build_packed_key();
         check_job->mr.m_sql = job->mr.m_sql; // sql is deep copy
 
-        DTCFieldSet* p_dtc_field_set = check_job->request_fields();
+        DTCFieldSet* p_dtc_field_set = const_cast<DTCFieldSet*>(check_job->request_fields());
         DELETE(p_dtc_field_set);
 
         p_dtc_field_set = new DTCFieldSet(

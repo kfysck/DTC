@@ -93,7 +93,7 @@ class BufferPond : private TimerObject {
 	//列扩展
 	DTCColExpand *_col_expand;
 
-	char _err_msg[256];
+	char _err_msg[512];
 	int _need_set_integrity;
 	//待淘汰节点数目
 	unsigned _need_purge_node_count;

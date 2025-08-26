@@ -156,7 +156,7 @@ int CAsyncFileImpl::Output(buffer & buff)
 int CAsyncFileWriter::Open()
 {
 	if (_controller.Init()) {
-		snprintf(_errmsg, sizeof(_errmsg), "controller init failed, %s",
+		snprintf(_errmsg, sizeof(_errmsg), "controller init failed, %.4000s",
 			 _controller.ErrorMessage());
 
 		return CHBGlobal::ASYNC_PROCESS_ERR;
@@ -164,7 +164,7 @@ int CAsyncFileWriter::Open()
 
 	CAsyncFileImpl *p = new CAsyncFileImpl();
 	if (p->OpenForWriter(_controller.WriterPos())) {
-		snprintf(_errmsg, sizeof(_errmsg), "open for writer failed, %s",
+		snprintf(_errmsg, sizeof(_errmsg), "open for writer failed, %.4000s",
 			 p->ErrorMessage());
 
 		return CHBGlobal::ASYNC_PROCESS_ERR;
@@ -205,7 +205,7 @@ int CAsyncFileWriter::Write(buffer & buf)
 			CAsyncFileImpl *p = new CAsyncFileImpl();
 			if (p->OpenForWriter(pos)) {
 				snprintf(_errmsg, sizeof(_errmsg),
-					 "create CAsyncFileImpl failed, %s",
+					 "create CAsyncFileImpl failed, %.4000s",
 					 p->ErrorMessage());
 
 				DELETE(p);
@@ -231,7 +231,7 @@ int CAsyncFileWriter::Write(buffer & buf)
 int CAsyncFileReader::Open()
 {
 	if (_controller.Init()) {
-		snprintf(_errmsg, sizeof(_errmsg), "controller init failed, %s",
+		snprintf(_errmsg, sizeof(_errmsg), "controller init failed, %.4000s",
 			 _controller.ErrorMessage());
 
 		return CHBGlobal::ASYNC_PROCESS_ERR;
@@ -239,7 +239,7 @@ int CAsyncFileReader::Open()
 
 	_asyncfile = new CAsyncFileImpl();
 	if (_asyncfile->OpenForReader(_controller.ReaderPos())) {
-		snprintf(_errmsg, sizeof(_errmsg), "open for reader failed, %s",
+		snprintf(_errmsg, sizeof(_errmsg), "open for reader failed, %.4000s",
 			 _asyncfile->ErrorMessage());
 
 		return CHBGlobal::ASYNC_PROCESS_ERR;
@@ -307,7 +307,7 @@ int CAsyncFileReader::Read(buffer & buff)
 			_asyncfile = new CAsyncFileImpl();
 			if (_asyncfile->OpenForReader(pos)) {
 				snprintf(_errmsg, sizeof(_errmsg),
-					 "create CAsyncFileImpl failed, %s",
+					 "create CAsyncFileImpl failed, %.4000s",
 					 _asyncfile->ErrorMessage());
 
 				DELETE(_asyncfile);

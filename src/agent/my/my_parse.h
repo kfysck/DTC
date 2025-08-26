@@ -31,10 +31,22 @@ MYSQL Protocol Definition, See more detail:
 void my_parse_req(struct msg *r);
 void my_parse_rsp(struct msg *r);
 
-int my_do_command(struct context *ctx, struct conn *c_conn, struct msg *msg);
+int my_do_command(struct msg *msg);
 int my_fragment(struct msg *r, uint32_t ncontinuum, struct msg_tqh *frag_msgq);
 
 int my_get_route_key(uint8_t *sql, int sql_len, int *start_offset,
 		     int *end_offset, const char* dbsession, struct msg* r);
+
+int my_get_command(uint8_t *input_raw_packet, uint32_t input_packet_length,
+		   struct msg *r, enum enum_server_command *cmd);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+int rule_sql_match(const char* szsql, const char* osql, const char* dbsession, char* out_dtckey, int* out_keytype);
+int get_statement_value(char* str, int len, const char* strkey, int* start_offset, int* end_offset);
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _MY_PARSE_H_ */

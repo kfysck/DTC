@@ -28,7 +28,9 @@ MYSQL Protocol Definition, See more detail:
 */
 
 #define MYSQL_HEADER_SIZE 4
+#ifndef MAX_PACKET_LENGTH
 #define MAX_PACKET_LENGTH (256L * 256L * 256L - 1)
+#endif
 #define DA_PROTOCOL_VERSION 2
 
 enum enum_agent_admin { CMD_NOP = 0, CMD_KEY_DEFINE };

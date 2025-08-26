@@ -281,7 +281,7 @@ struct cache_instance *get_instance_from_array(struct array replica_array, uint1
 				t = 1;
 				t = t << ci->failure_num;
 				t = t * 1000;
-				printf("i :%.*s now_ms%"PRIu64" failtime%"PRIu64"  t%"PRIu64" \n", ci->pname.len, ci->pname.data, now_ms, ci->last_failure_ms, t);
+				printf("i :%.*s now_ms%"PRIu64" failtime%"PRIu64"  t%d \n", ci->pname.len, ci->pname.data, now_ms, ci->last_failure_ms, t);
 				if ((now_ms - ci->last_failure_ms) > t) {
 					(*cnt) = 0;
 					(*array_idx) = idx + 1;
@@ -569,7 +569,7 @@ void instance_deinit(struct array *instance) {
 	for (i = 0, nserver = array_n(instance); i < nserver; i++) {
 		struct cache_instance *ci;
 		ci = array_pop(instance);
-		printf("ip : %.*s, num : %d, fail_time : %d\n", ci->pname.len, ci->pname.data, ci->num, ci->last_failure_ms);
+		printf("ip : %.*s, num : %d, fail_time : %"PRIu64"\n", ci->pname.len, ci->pname.data, ci->num, ci->last_failure_ms);
 		string_deinit(&ci->pname);
 		ASSERT(TAILQ_EMPTY(&ci->s_conn_q) && ci->ns_conn_q == 0);
 	}

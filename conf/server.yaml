@@ -1,0 +1,6 @@
+rules:
+  - !AUTHORITY
+    users:
+      - sharding@%:sharding
+    provider:
+      type: ALL_PERMITTED

@@ -27,6 +27,8 @@
 #include "da_errno.h"
 #include "da_stats.h"
 #include "da_time.h"
+#include "my/my_net_send.h"
+#include "my/my_parse.h"
 #include "my/my_comm.h"
 
 #define LAYER3_DEF "layer3"
@@ -343,7 +345,7 @@ int dtc_header_add(struct msg *msg, enum enum_agent_admin admin, char* dbname)
 	dtc_header.packet_len = mbuf_length(mbuf) + sizeof(dtc_header) + dtc_header.dbname_len;
 	dtc_header.layer = msg->layer;
 
-	mbuf_copy(new_buf, &dtc_header, sizeof(dtc_header));
+	mbuf_copy(new_buf, (uint8_t*)&dtc_header, sizeof(dtc_header));
 	if(dbname && strlen(dbname) > 0)
 		mbuf_copy(new_buf, dbname, dtc_header.dbname_len);
 
@@ -356,7 +358,7 @@ int dtc_header_add(struct msg *msg, enum enum_agent_admin admin, char* dbname)
 	mbuf_insert(&msg->buf_q, new_buf);
 
 	msg->mlen = mbuf_length(new_buf);
-	log_debug("msg->mlen:%d sizeof(dtc_header):%d mbuf_length(mbuf):%d",
+	log_debug("msg->mlen:%d sizeof(dtc_header):%zu mbuf_length(mbuf):%d",
 		  msg->mlen, sizeof(dtc_header), mbuf_length(mbuf));
 
 	return 0;
@@ -411,13 +413,13 @@ void req_process(struct context *ctx, struct conn *c_conn, struct msg *msg)
 	case NEXT_FORWARD:
 		dtc_header_add(msg, CMD_NOP, c_conn->dbname);
 		log_debug(
-			"FORWARD. msg len: %d, msg id: %d",
+			"FORWARD. msg len: %d, msg id: %lu",
 			msg->mlen, msg->id);
 		req_forward(ctx, c_conn, msg);
 		break;
 	case NEXT_RSP_OK:
 		log_debug(
-			"RSP OK. msg len: %d, msg id: %d",
+			"RSP OK. msg len: %d, msg id: %lu",
 			msg->mlen, msg->id);
 		if (net_send_ok(msg, c_conn) <
 		    0) /* default resp login success. */
@@ -426,7 +428,7 @@ void req_process(struct context *ctx, struct conn *c_conn, struct msg *msg)
 		break;
 	case NEXT_RSP_ERROR:
 		log_debug(
-			"RSP ERROR. msg len: %d, msg id: %d",
+			"RSP ERROR. msg len: %d, msg id: %lu",
 			msg->mlen, msg->id);
 		if (net_send_error(msg, c_conn) <
 		    0) /* default resp login success. */

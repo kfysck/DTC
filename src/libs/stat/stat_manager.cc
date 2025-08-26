@@ -420,8 +420,11 @@ void *StatManager::get_map_file_info(const char *file_path, int size)
 	int fd = open(file_path, O_RDWR | O_CREAT, 0666);
 	void *map = NULL;
 	if (fd >= 0) {
-		if (size > 0)
-			ftruncate(fd, size);
+		if (size > 0) {
+			if (ftruncate(fd, size) == -1) {
+				// Handle error - could log or close fd
+			}
+		}
 		else
 			size = lseek(fd, 0L, SEEK_END);
 

@@ -46,7 +46,7 @@ public:
 	static ConnectorProcess mysql_process_;
 
 	static const char* version;
-	static char* dtc_conf;
+	static const char* dtc_conf;
 	static char* table_conf;
 	static int backend;
 	static int normal;

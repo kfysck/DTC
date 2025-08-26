@@ -34,7 +34,7 @@ class Ttree {
     protected:
 	ALLOC_HANDLE_T root_handle_;
 	MallocBase &m_stMalloc;
-	char err_message_[100];
+	char err_message_[4096];
 
     public:
 	Ttree(MallocBase &stMalloc);

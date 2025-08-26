@@ -75,7 +75,7 @@ class TimerUnit {
 	int check_ready(void);
 };
 
-class TimerObject : private ListObject<TimerObject> {
+class TimerObject : public ListObject<TimerObject> {
     private:
 	int64_t objexp;
 

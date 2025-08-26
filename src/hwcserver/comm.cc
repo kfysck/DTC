@@ -19,7 +19,7 @@ CRegistor CComm::registor;
 ConnectorProcess CComm::mysql_process_;
 
 const char *CComm::version = "hwc.0.1";
-char* CComm::dtc_conf = "../conf/dtc.yaml";
+const char* CComm::dtc_conf = "../conf/dtc.yaml";
 int CComm::backend = 0;
 int CComm::normal = 1;
 

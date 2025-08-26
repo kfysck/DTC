@@ -19,7 +19,7 @@ LINK_LIBRARIES(libyaml-cpp.a)
 LINK_LIBRARIES(pthread)
 LINK_LIBRARIES(dl)
 
-ADD_DEFINITIONS("-g -fPIC -fpermissive -std=gnu++11")
+ADD_DEFINITIONS("-g -fPIC -fpermissive -std=gnu++11 -D_GLIBCXX_USE_CXX11_ABI=0")
 ADD_DEFINITIONS(-Wno-builtin-macro-redefined)
 
 ADD_LIBRARY(stat ${SRC_LIST1})

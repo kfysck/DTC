@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 #include <inttypes.h>
+#include <sys/uio.h>
 #include "da_mem_pool.h"
 #include "da_conn.h"
 #include "da_listener.h"

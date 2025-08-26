@@ -47,7 +47,9 @@
   than this value will have first byte of OK packet to be 254 thus does not
   provide a means to identify if this is OK or EOF packet.
 */
+#ifndef MAX_PACKET_LENGTH
 #define MAX_PACKET_LENGTH (256L*256L*256L-1)
+#endif
 
 /*
   USER_HOST_BUFF_SIZE -- length of string buffer, that is enough to contain

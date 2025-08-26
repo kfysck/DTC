@@ -368,7 +368,7 @@ int DTCFieldValue::Compare(const RowValue &r, int iCmpFirstNRows)
 	return 1;
 }
 
-int RowValue::Compare(const RowValue &rv, uint8_t *fieldIDList, uint8_t num)
+int RowValue::Compare(const RowValue &rv, uint8_t *fieldIDList, uint8_t num) const
 {
 	for (int i = 0; i < num; ++i) {
 		switch (field_type(fieldIDList[i])) {
