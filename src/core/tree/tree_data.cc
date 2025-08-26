@@ -1197,7 +1197,7 @@ int TreeData::delete_sub_raw_data(DTCJobOperation &job_op, MEM_HANDLE_T hRecord)
 					  isFreeNode);
 		if (iret != 0) {
 			snprintf(err_message_, sizeof(err_message_),
-				 "delete stTree failed:%d\t%s", iret,
+				 "delete stTree failed:%d\t%.4000s", iret,
 				 t_tree_.get_err_msg());
 			return -4;
 		}

@@ -112,7 +112,13 @@ int LogBase::scan_serial(uint32_t *min, uint32_t *max)
 	*max = 0;
 
 	char prefix[MAX_PATH_NAME_LEN] = { 0 };
-	snprintf(prefix, MAX_PATH_NAME_LEN, "%s.binlog.", _prefix);
+	int prefix_len = strlen(_prefix);
+	if (prefix_len + 8 >= MAX_PATH_NAME_LEN) {
+		return -1;
+	}
+	// Use safer string operations to avoid truncation warnings
+	strncpy(prefix, _prefix, MAX_PATH_NAME_LEN - 9);
+	strcat(prefix, ".binlog.");
 
 	int l = strlen(prefix);
 	uint32_t v = 0;

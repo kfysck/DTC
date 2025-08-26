@@ -84,8 +84,11 @@ int TreeDataProcess::do_replace_all(Node *p_node, RawData *new_data)
 	}
 
 	if (iRet != 0) {
+		const char* err_msg = tmpTreeData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 23; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "root-data init error: %s", tmpTreeData.get_err_msg());
+			 "root-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		tmpTreeData.destory();
 		return (-2);
 	}
@@ -98,8 +101,11 @@ int TreeDataProcess::do_replace_all(Node *p_node, RawData *new_data)
 	}
 
 	if (iRet != 0) {
+		const char* err_msg = tmpTreeData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 23; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "root-data init error: %s", tmpTreeData.get_err_msg());
+			 "root-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		tmpTreeData.destory();
 		return (-2);
 	}
@@ -196,9 +202,11 @@ int TreeDataProcess::do_append(DTCJobOperation &job_op, Node *p_node,
 	if (iRet != EC_NO_MEM)
 		p_node->vd_handle() = m_stTreeData.get_handle();
 	if (iRet != 0) {
+		const char* err_msg = m_stTreeData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 32; // Reserve space for prefix and error code
 		snprintf(err_message_, sizeof(err_message_),
-			 "tree-data insert row error: %s,%d",
-			 m_stTreeData.get_err_msg(), iRet);
+			 "tree-data insert row error: %.*s,%d",
+			 (int)available_space, err_msg ? err_msg : "unknown error", iRet);
 		/*标记加入黑名单*/
 		job_op.push_black_list_size(m_stTreeData.need_size());
 		return (-2);
@@ -423,8 +431,11 @@ int TreeDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 		p_node->vd_handle() = m_stTreeData.get_handle();
 
 	if (iRet != 0) {
+		const char* err_msg = m_stTreeData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 22; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data init error: %s", m_stTreeData.get_err_msg());
+			 "raw-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		/*标记加入黑名单*/
 		job_op.push_black_list_size(m_stTreeData.need_size());
 		p_buffer_pond_->purge_node(job_op.packed_key(), *p_node);
@@ -484,10 +495,12 @@ int TreeDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 			if (0 == iRet)
 				continue;
 		ERROR_PROCESS:
+			const char* err_msg = m_stTreeData.get_err_msg();
+			size_t available_space = sizeof(err_message_) - 50; // Reserve space for prefix and numbers
 			snprintf(
 				err_message_, sizeof(err_message_),
-				"raw-data insert row error: ret=%d,err=%s, cnt=%d",
-				iRet, m_stTreeData.get_err_msg(),
+				"raw-data insert row error: ret=%d,err=%.*s, cnt=%d",
+				iRet, (int)available_space, err_msg ? err_msg : "unknown error",
 				try_purge_count);
 			/*标记加入黑名单*/
 			job_op.push_black_list_size(all_rows_size);
@@ -587,9 +600,11 @@ int TreeDataProcess::do_replace(DTCJobOperation &job_op, Node *p_node,
 			p_node->vd_handle() = m_stTreeData.get_handle();
 
 		if (iRet != 0) {
+			const char* err_msg = m_stTreeData.get_err_msg();
+			size_t available_space = sizeof(err_message_) - 35; // Reserve space for prefix and error code
 			snprintf(err_message_, sizeof(err_message_),
-				 "raw-data replace row error: %d, %s", iRet,
-				 m_stTreeData.get_err_msg());
+				 "raw-data replace row error: %d, %.*s", iRet,
+				 (int)available_space, err_msg ? err_msg : "unknown error");
 			/*标记加入黑名单*/
 			job_op.push_black_list_size(m_stTreeData.need_size());
 			return (-3);

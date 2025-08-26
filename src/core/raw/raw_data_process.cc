@@ -186,8 +186,11 @@ int RawDataProcess::expand_node(DTCJobOperation &job_op, Node *p_node)
 	}
 
 	if (iRet != DTC_CODE_SUCCESS) {
+		const char* err_msg = stTmpRawData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 22; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data init error: %s", stTmpRawData.get_err_msg());
+			 "raw-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		stTmpRawData.destory();
 		return -3;
 	}
@@ -195,8 +198,11 @@ int RawDataProcess::expand_node(DTCJobOperation &job_op, Node *p_node)
 	stTmpRawData.set_refrence(&stNewTmpRawData);
 	iRet = stTmpRawData.copy_all();
 	if (iRet != DTC_CODE_SUCCESS) {
+		const char* err_msg = stTmpRawData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 22; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data init error: %s", stTmpRawData.get_err_msg());
+			 "raw-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		stTmpRawData.destory();
 		return -3;
 	}
@@ -248,8 +254,11 @@ int RawDataProcess::do_replace_all(Node *p_node, RawData *new_data)
 	}
 
 	if (iRet != 0) {
+		const char* err_msg = tmpRawData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 22; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data init error: %s", tmpRawData.get_err_msg());
+			 "raw-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		tmpRawData.destory();
 		return (-2);
 	}
@@ -257,8 +266,11 @@ int RawDataProcess::do_replace_all(Node *p_node, RawData *new_data)
 	tmpRawData.set_refrence(new_data);
 	iRet = tmpRawData.copy_all();
 	if (iRet != 0) {
+		const char* err_msg = tmpRawData.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 22; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data init error: %s", tmpRawData.get_err_msg());
+			 "raw-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		tmpRawData.destory();
 		return (-3);
 	}
@@ -597,9 +609,11 @@ int RawDataProcess::do_append(DTCJobOperation &job_op, Node *p_node,
 
 	if (affected_data != NULL &&
 	    affected_data->insert_row(*stpNodeRow, false, isDirty) != 0) {
+		const char* err_msg = affected_data->get_err_msg();
+		size_t available_space = sizeof(err_message_) - 28; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data insert row error: %s",
-			 affected_data->get_err_msg());
+			 "raw-data insert row error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		return (-1);
 	}
 
@@ -618,9 +632,11 @@ int RawDataProcess::do_append(DTCJobOperation &job_op, Node *p_node,
 	if (iRet != EC_NO_MEM)
 		p_node->vd_handle() = raw_data_.get_handle();
 	if (iRet != 0) {
+		const char* err_msg = raw_data_.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 28; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data insert row error: %s",
-			 raw_data_.get_err_msg());
+			 "raw-data insert row error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		/*标记加入黑名单*/
 		job_op.push_black_list_size(raw_data_.need_size());
 		return (-2);
@@ -704,8 +720,11 @@ int RawDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 		p_node->vd_handle() = raw_data_.get_handle();
 
 	if (iRet != 0) {
+		const char* err_msg = raw_data_.get_err_msg();
+		size_t available_space = sizeof(err_message_) - 22; // Reserve space for prefix
 		snprintf(err_message_, sizeof(err_message_),
-			 "raw-data init error: %s", raw_data_.get_err_msg());
+			 "raw-data init error: %.*s",
+			 (int)available_space, err_msg ? err_msg : "unknown error");
 		/*标记加入黑名单*/
 		job_op.push_black_list_size(raw_data_.need_size());
 		p_buffer_pond_->purge_node(job_op.packed_key(), *p_node);
@@ -771,10 +790,12 @@ int RawDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 			if (0 == iRet)
 				continue;
 		ERROR_PROCESS:
+			const char* err_msg = raw_data_.get_err_msg();
+			size_t available_space = sizeof(err_message_) - 50; // Reserve space for prefix and numbers
 			snprintf(
 				err_message_, sizeof(err_message_),
-				"raw-data insert row error: ret=%d,err=%s, cnt=%d",
-				iRet, raw_data_.get_err_msg(), try_purge_count);
+				"raw-data insert row error: ret=%d,err=%.*s, cnt=%d",
+				iRet, (int)available_space, err_msg ? err_msg : "unknown error", try_purge_count);
 			/*标记加入黑名单*/
 			job_op.push_black_list_size(all_rows_size);
 			p_buffer_pond_->purge_node(job_op.packed_key(),
@@ -900,9 +921,11 @@ int RawDataProcess::do_replace(DTCJobOperation &job_op, Node *p_node,
 		if (iRet != EC_NO_MEM)
 			p_node->vd_handle() = raw_data_.get_handle();
 		if (iRet != 0) {
+			const char* err_msg = raw_data_.get_err_msg();
+			size_t available_space = sizeof(err_message_) - 35; // Reserve space for prefix and error code
 			snprintf(err_message_, sizeof(err_message_),
-				 "raw-data replace row error: %d, %s", iRet,
-				 raw_data_.get_err_msg());
+				 "raw-data replace row error: %d, %.*s", iRet,
+				 (int)available_space, err_msg ? err_msg : "unknown error");
 			/*标记加入黑名单*/
 			job_op.push_black_list_size(raw_data_.need_size());
 			return (-3);
@@ -926,9 +949,11 @@ int RawDataProcess::do_replace(DTCJobOperation &job_op, Node *p_node,
 			p_node->vd_handle() = raw_data_.get_handle();
 
 		if (iRet != 0) {
+			const char* err_msg = raw_data_.get_err_msg();
+			size_t available_space = sizeof(err_message_) - 35; // Reserve space for prefix and error code
 			snprintf(err_message_, sizeof(err_message_),
-				 "raw-data replace row error: %d, %s", iRet,
-				 raw_data_.get_err_msg());
+				 "raw-data replace row error: %d, %.*s", iRet,
+				 (int)available_space, err_msg ? err_msg : "unknown error");
 			/*标记加入黑名单*/
 			job_op.push_black_list_size(raw_data_.need_size());
 			return (-3);
@@ -1079,9 +1104,11 @@ int RawDataProcess::do_update(DTCJobOperation &job_op, Node *p_node,
 		if (iRet != EC_NO_MEM)
 			p_node->vd_handle() = raw_data_.get_handle();
 		if (iRet != 0) {
+			const char* err_msg = raw_data_.get_err_msg();
+			size_t available_space = sizeof(err_message_) - 35; // Reserve space for prefix and error code
 			snprintf(err_message_, sizeof(err_message_),
-				 "raw-data replace row error: %d, %s", iRet,
-				 raw_data_.get_err_msg());
+				 "raw-data replace row error: %d, %.*s", iRet,
+				 (int)available_space, err_msg ? err_msg : "unknown error");
 			/*标记加入黑名单*/
 			job_op.push_black_list_size(raw_data_.need_size());
 			return (-6);
