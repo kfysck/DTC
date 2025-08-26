@@ -383,10 +383,10 @@ int main(int argc, char **argv)
 		conn_proc->set_proc_timeout(proc_timeout - 1);
 	while (!stop) {
 		helperArgs.netfd = accept_connection(fd);
-		char buf[16];
-		memset(buf, 0, 16);
+		char buf[17];
+		memset(buf, 0, 17);
 		buf[0] = WATCHDOG_INPUT_OBJECT;
-		snprintf(buf + 1, 15, "%s", conn_proc->get_name());
+		snprintf(buf + 1, 16, "%s", conn_proc->get_name());
 		watch_dog_fork(buf, (int (*)(void *))helper_proc_run,
 			       (void *)&helperArgs);
 
