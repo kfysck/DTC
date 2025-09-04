@@ -1,0 +1,30 @@
+name: building
+
+on: push
+
+jobs:        
+  building:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5.0.0
+      
+      - name: Install gcc env
+        run: |
+          sudo apt update
+          sudo apt install gcc g++
+        shell: bash
+        
+      - name: Install dependency
+        run: |
+          sudo apt-get install -y make zlib1g zlib1g-dev bzip2 liblz4-dev libasan0 openssl libmxml-dev wget
+
+     
+    
+      - name: cmake project
+        run: |
+          cd ${{github.workspace}}
+          mkdir build
+          cd build
+          cmake ../
+          make
+
