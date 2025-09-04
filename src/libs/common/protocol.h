@@ -57,7 +57,7 @@ class DRequest {
 	       // OBSOLETED
 	       Invalidate = 14,
 	       Monitor = 15,
-	       // work helper 重新载入配置文件
+	       // work helper reload configuration file
 	       ReloadConfig = 16,
 	       // master-slave backup
 	       Replicate = 17,

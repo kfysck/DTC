@@ -114,10 +114,10 @@ class MallocBase {
 	virtual ALLOC_SIZE_T ask_for_destroy_size(ALLOC_HANDLE_T hHandl) = 0;
 
 	/*************************************************
-	  Description:	检测handle是否有效
-	  Input:		内存句柄
+	  Description:	Check if handle is valid
+	  Input:		Memory handle
 	  Output:		
-      Return:	    0: 有效; -1:无效
+      Return:	    0: valid; -1: invalid
 	*************************************************/
 	virtual int handle_is_valid(ALLOC_HANDLE_T mem_handle) = 0;
 };

@@ -77,11 +77,11 @@ inline int NODE_LIST_EMPTY(Node head)
 	return head.lru_next() == head.node_id();
 }
 
-/*正向遍历*/
+/* Forward traversal */
 #define NODE_LIST_FOR_EACH(pos, head)                                          \
 	for (pos = head.Next(); pos != head; pos = pos.Next())
 
-/*反向遍历*/
+/* Reverse traversal */
 #define NODE_LIST_FOR_EACH_RVS(pos, head)                                      \
 	for (pos = head.Prev(); pos != head; pos = pos.Prev())
 

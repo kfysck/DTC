@@ -24,7 +24,7 @@
 
 DTC_BEGIN_NAMESPACE
 
-/* 共享内存操作定义 */
+/* Shared memory operation definitions */
 #define M_HANDLE(ptr) PtMalloc::instance()->get_handle(ptr)
 #define M_POINTER(type, v) PtMalloc::instance()->Pointer<type>(v)
 #define M_MALLOC(size) PtMalloc::instance()->Malloc(size)
@@ -33,7 +33,7 @@ DTC_BEGIN_NAMESPACE
 #define M_FREE(v) PtMalloc::instance()->Free(v)
 #define M_ERROR() PtMalloc::instance()->get_err_msg()
 
-/* Node查找函数 */
+/* Node search functions */
 #define I_SEARCH(id) NodeIndex::instance()->do_search(id)
 #define I_INSERT(node) NodeIndex::instance()->do_insert(node)
 /*#define I_DELETE(node)		NodeIndex::instance()->Delete(node) */

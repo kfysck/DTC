@@ -56,7 +56,7 @@ class ConnectorProcess {
 	unsigned int proc_timeout;
 
     protected:
-	/* 将字符串printf在原来字符串的后面，如果buffer不够大会自动重新分配buffer */
+	/* Printf string to the end of original string, buffer will be automatically reallocated if not large enough */
 
 	void init_table_name(const DTCValue *key, int field_type);
 	void init_sql_buffer(void);

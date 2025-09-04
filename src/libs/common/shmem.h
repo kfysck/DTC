@@ -42,6 +42,6 @@ class SharedMemory {
 	int mem_lock(void);
 	void mem_unlock(void);
 
-	/* 删除共享内存 */
+	/* Delete shared memory */
 	int mem_delete(void);
 };
