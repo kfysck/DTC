@@ -16,7 +16,7 @@ jobs:
         
       - name: Install dependency
         run: |
-          sudo apt-get install -y libmxml-dev
+          sudo apt-get install -y libmxml-dev libnsl2
     
       - name: cmake project
         run: |
