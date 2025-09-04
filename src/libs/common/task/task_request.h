@@ -204,7 +204,7 @@ class DTCJobOperation : public DtcJob,
 	 * expire_time
 	 *
 	 * */
-	/* 加入黑名单的大小 */
+	/* Size when added to blacklist */
 	unsigned blacklist_size;
 	uint32_t timestamp;
 

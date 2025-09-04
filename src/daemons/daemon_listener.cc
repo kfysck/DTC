@@ -35,7 +35,7 @@ WatchDogListener::~WatchDogListener()
 	}
 };
 
-/* 建socket */
+/* Create socket */
 int WatchDogListener::attach_watch_dog()
 {
 	int fd[2];

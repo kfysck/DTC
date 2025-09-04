@@ -112,7 +112,7 @@ template <typename T> class ThreadingOutputDispatcher {
 		if (Stopping())
 			return -1;
 
-		/* freelist被别的线程在lock锁住的时候被别的线程置成了NULL */
+		/* freelist was set to NULL by other threads when locked by other threads */
 		Lock();
 		if (free_list) {
 			q = free_list;

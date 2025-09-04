@@ -21,7 +21,7 @@
 #include "log/log.h"
 
 StatThread g_stat_mgr;
-//初始化内存映射
+//Initialize memory mapping
 int init_statistics(void)
 {
 	int ret;

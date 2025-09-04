@@ -65,7 +65,7 @@ const uint16_t DtcJob::cmd2type[] = {
 	TaskTypeWrite, // REPLACE
 	TaskTypeWrite, // Flush
 	TaskTypeWrite, // Invalidate
-	TaskTypeAdmin, // Monitor,此条是为了占位
+	TaskTypeAdmin, // Monitor, this entry is for placeholder
 	TaskTypeHelperReloadConfig, //Reload
 };
 

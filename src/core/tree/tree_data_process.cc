@@ -251,7 +251,7 @@ int TreeDataProcess::do_get(DTCJobOperation &job_op, Node *p_node)
 		return iRet;
 	}
 
-	/*更新访问时间和查找操作计数*/
+	/*Update access time and query operation count*/
 	log4cplus_debug("node[id:%u] ,Get Count is %d", p_node->node_id(),
 			m_stTreeData.total_rows());
 	return (0);
@@ -470,17 +470,17 @@ int TreeDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 				stpNodeRow = pstRow;
 			}
 
-			/* 插入当前行 */
+			/* Insert current row */
 			iRet = m_stTreeData.insert_row(*stpNodeRow, KeyCompare,
 						       false);
 
-			/* 如果内存空间不足，尝试扩大最多两次 */
+			/* If insufficient memory space, try to expand up to two times */
 			if (iRet == EC_NO_MEM) {
 				if (try_purge_count >= 2) {
 					goto ERROR_PROCESS;
 				}
 
-				/* 尝试次数 */
+				/* Number of attempts */
 				++try_purge_count;
 				if (p_buffer_pond_->try_purge_size(
 					    m_stTreeData.need_size(),
@@ -491,7 +491,7 @@ int TreeDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 			if (iRet != EC_NO_MEM)
 				p_node->vd_handle() = m_stTreeData.get_handle();
 
-			/* 当前行操作成功 */
+			/* Current row operation successful */
 			if (0 == iRet)
 				continue;
 		ERROR_PROCESS:

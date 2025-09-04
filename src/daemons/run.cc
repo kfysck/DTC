@@ -27,7 +27,7 @@
 #include "log/log.h"
 #include "daemon/daemon.h"
 #include "../core/global.h"
-/* 打开看门狗 */
+/* Start watchdog */
 int start_dtc(int (*entry)(void *), void *args)
 {
     int delay = 5;

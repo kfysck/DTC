@@ -52,9 +52,9 @@ class TimerUnit {
 	TimerList pending;
 	TimerList *next;
 
-	int64_t m_SystemTime; /*系统时间*/
-	int64_t m_NowTime; /*应用层时间*/
-	int64_t m_TimeOffSet; /*时间拨动后的修正量*/
+	int64_t m_SystemTime; /*System time*/
+	int64_t m_NowTime; /*Application layer time*/
+	int64_t m_TimeOffSet; /*Time offset correction after time adjustment*/
 
     public:
 	friend class TimerObject;

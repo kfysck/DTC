@@ -49,7 +49,7 @@ int PluginDecoderUnit::process_stream(int newfd, int req, void *peer,
 		return -1;
 	}
 
-	/* accept唤醒后立即recv */
+	/* recv immediately after accept wakeup */
 	plugin_client->input_notify();
 
 	return 0;

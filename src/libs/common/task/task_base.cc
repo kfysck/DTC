@@ -995,7 +995,7 @@ void DtcJob::decode_request_v1(DTC_HEADER_V1 &header, char *p)
 
 		if (header.cmd == DRequest::TYPE_SYSTEM_COMMAND) {
 			set_table_definition(
-				hotbackupTableDef); // 管理命令，换成管理表定义
+				hotbackupTableDef); // Management command, switch to management table definition
 			log4cplus_debug("hb table ptr: %p, name: %s",
 					hotbackupTableDef,
 					hotbackupTableDef->table_name());

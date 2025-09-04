@@ -88,7 +88,7 @@ int DtcJob::pass_all_result(ResultSet *rs)
 
 int DtcJob::merge_result(const DtcJob &job)
 {
-	/*首先根据子包击中情况统计父包的名种情况*/
+	/* First, count various situations of parent packets based on sub-packet hit status */
 	uint32_t uChildTaskHitFlag = job.resultInfo.hit_flag();
 	if (HIT_SUCCESS == uChildTaskHitFlag) {
 		resultInfo.incr_tech_hit_num();

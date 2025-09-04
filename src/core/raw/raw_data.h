@@ -27,9 +27,9 @@
 #define PRE_DECODE_ROW 1
 
 typedef enum _EnumDataType {
-	DATA_TYPE_RAW, // 平板数据结构
-	DATA_TYPE_TREE_ROOT, // 树的根节点
-	DATA_TYPE_TREE_NODE // 树的节点
+	DATA_TYPE_RAW, // flat data structure
+	DATA_TYPE_TREE_ROOT, // tree root node
+	DATA_TYPE_TREE_NODE // tree node
 } EnumDataType;
 
 typedef enum _enum_oper_type_ {
