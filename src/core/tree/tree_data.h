@@ -481,14 +481,14 @@ class TreeData {
 	int replace_sub_raw_data(DTCJobOperation &job_op, MEM_HANDLE_T hRecord);
 
 	/*************************************************
-	  Description:	处理T树中平板类型业务
+	  Description:	Process flat type operations in T-tree
 	  Output:		
 	*************************************************/
 	int get_sub_raw(DTCJobOperation &job_op, unsigned int nodeCnt,
 			bool isAsc, SubRowProcess subRowProc);
 
 	/*************************************************
-	  Description:	匹配索引
+	  Description:	Match index condition
 	  Output:		
 	*************************************************/
 	int match_index_condition(DTCJobOperation &job_op, unsigned int rowCnt,
@@ -522,27 +522,27 @@ class TreeData {
 	int get_expire_time(DTCTableDefinition *t, uint32_t &expire);
 
 	/*************************************************
-	  Description:	替换当前行
-	  Input:		stRow	仅使用row的字段类型等信息，不需要实际数据
+	  Description:	Replace current row
+	  Input:		stRow	Only uses row field type info, no actual data needed
 	  Output:		
-	  Return:		0为成功，非0失败
+	  Return:		0 on success, non-zero on failure
 	*************************************************/
 	int replace_cur_row(const RowValue &stRow, bool isDirty,
 			    MEM_HANDLE_T *hRecord);
 
 	/*************************************************
-	  Description:	删除当前行
-	  Input:		stRow	仅使用row的字段类型等信息，不需要实际数据
+	  Description:	Delete current row
+	  Input:		stRow	Only uses row field type info, no actual data needed
 	  Output:		
-	  Return:		0为成功，非0失败
+	  Return:		0 on success, non-zero on failure
 	*************************************************/
 	int delete_cur_row(const RowValue &stRow);
 
 	/*************************************************
-	  Description:	调到下一行
-	  Input:		stRow	仅使用row的字段类型等信息，不需要实际数据
-	  Output:		m_uiOffset会指向下一行数据的偏移
-	  Return:		0为成功，非0失败
+	  Description:	Skip to next row
+	  Input:		stRow	Only uses row field type info, no actual data needed
+	  Output:		m_uiOffset will point to next row data offset
+	  Return:		0 on success, non-zero on failure
 	*************************************************/
 	int skip_row(const RowValue &stRow);
 
@@ -556,10 +556,10 @@ class TreeData {
 	}
 
 	/*************************************************
-	  Description:	查询本次操作增加的行数（可以为负数）
+	  Description:	Query number of rows added by this operation (can be negative)
 	  Input:		
 	  Output:		
-	  Return:		行数
+	  Return:		Number of rows
 	*************************************************/
 	int64_t get_increase_row_count()
 	{
