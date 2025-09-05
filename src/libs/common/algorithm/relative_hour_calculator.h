@@ -28,7 +28,7 @@ class RelativeHourCalculator {
 	~RelativeHourCalculator()
 	{
 	}
-	/*由于mktimehelper原因，需要减去八个小时*/
+	/*Due to mktimehelper, need to subtract eight hours*/
 	void set_base_hour(uint64_t ddwBaseYear)
 	{
 		uint64_t ddwRelativeTime =
@@ -68,7 +68,7 @@ class RelativeHourCalculator {
 	}
 
     private:
-	uint64_t m_BaseHour; /*本业务对应的ModuleId*/
+	uint64_t m_BaseHour; /*ModuleId corresponding to this business*/
 };
 #define RELATIVE_HOUR_CALCULATOR Singleton<RelativeHourCalculator>::instance()
 #endif

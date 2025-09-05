@@ -332,7 +332,7 @@ static int listener_accept(struct context *ctx, struct conn *l)
 	}
 
 	/*
-	 * 对于ipv4与ipv6协议关闭negale算法
+	 * Disable Nagle algorithm for ipv4 and ipv6 protocols
 	 */
 	if (l->family == AF_INET || l->family == AF_INET6) {
 		status = set_tcpnodelay(c->fd);

@@ -129,7 +129,7 @@ void _set_log_level_(int l) {
 
 void _set_log_switch_(int iSwitch)
 {
-	//0 不开启本地日志
+	//0 means do not enable local logging
 	__log_switch__ = iSwitch;
 }
 

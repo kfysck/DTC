@@ -20,13 +20,13 @@
 #include <sys/cdefs.h>
 __BEGIN_DECLS
 /*
-   bits操作函数
+   bits operation functions
    */
 
 /* 
  *
- *   select.h中提供的FD_*宏在32位机器上是按照byte来置位的（汇编实现），但在64位
- *   机器上是按照8 bytes来置位的，所以当碰到mmap文件末尾时，有可能segment fault。
+ *   FD_* macros provided in select.h set bits by byte on 32-bit machines (assembly implementation), but on 64-bit
+ *   machines they set bits by 8 bytes, so when encountering the end of mmap files, segment fault may occur.
  */
 
 #define CHAR_BITS 8

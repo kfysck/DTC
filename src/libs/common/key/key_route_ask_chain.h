@@ -109,15 +109,15 @@ class KeyRouteAskChain : public JobAskInterface<DTCJobOperation> {
 	std::string m_selfName;
 	ConsistentHashSelector m_selector;
 
-	//级联状态枚举值，不可与上面的迁移状态枚举值重复
+	//Cascade state enum values, cannot duplicate with migration state enum values above
 	enum CascadeState {
 		CS_NOT_STARTED = 100,
 		CS_CASCADING,
 		CS_MAX,
 	};
-	//本DTC级联状态
+	//This DTC cascade state
 	int m_iCSState;
-	//级联对端DTC地址，例：10.191.147.188:12000/tcp
+	//Cascade remote DTC address, e.g.: 10.191.147.188:12000/tcp
 	std::string m_strCSAddr;
 };
 

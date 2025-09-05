@@ -27,7 +27,7 @@
 	__sync_bool_compare_and_swap(a_ptr, a_oldVal, a_newVal)
 
 /*
- * 提供给业务类继承
+ * Provided for business class inheritance
  */
 class BaseTask {
     private:

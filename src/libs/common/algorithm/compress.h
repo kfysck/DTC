@@ -25,14 +25,14 @@ class DTCCompress {
 		return errmsg_;
 	}
 
-	//source 被压缩的缓冲区 sourcelen 被压缩缓冲区的原始长度
-	//dest   压缩后的缓冲区 destlen   被压缩后的缓冲区长度
-	//注意调用该函数时， destlen 首先要设置为dest缓冲区最大可以容纳的长度
+	//source: buffer to be compressed, sourcelen: original length of buffer to be compressed
+	//dest: compressed buffer, destlen: length of compressed buffer
+	//Note: when calling this function, destlen must first be set to the maximum capacity of dest buffer
 	int compress(const char *source, unsigned long sourceLen);
 
-	//source 待解压的缓冲区 sourcelen 待解压缓冲区的原始长度
-	//dest   解压后的缓冲区 destlen   解缩后的缓冲区长度
-	//注意调用该函数时， destlen 首先要设置为dest缓冲区最大可以容纳的长度
+	//source: buffer to be decompressed, sourcelen: original length of buffer to be decompressed
+	//dest: decompressed buffer, destlen: length of decompressed buffer
+	//Note: when calling this function, destlen must first be set to the maximum capacity of dest buffer
 	int UnCompress(char **dest, int *destlen, const char *source,
 		       unsigned long sourceLen);
 

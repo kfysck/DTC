@@ -328,7 +328,7 @@ int ClientAgent::send_result()
 
 		if (frontPkt->vec_count() + sender->vec_count() >
 		    SENDER_MAX_VEC) {
-			/*这个地方打印error，如果在10s内会5次走入此次分支的话，统计子进程会上报告警*/
+			/*Print error here, if this branch is entered 5 times within 10s, the statistics subprocess will report an alarm*/
 			log4cplus_error(
 				"the sum value of front packet veccount[%d] and sender veccount[%d]is greater than SENDER_MAX_VEC[%d]",
 				frontPkt->vec_count(), sender->vec_count(),
