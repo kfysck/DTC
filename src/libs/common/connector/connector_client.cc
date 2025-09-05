@@ -41,7 +41,7 @@ ConnectorClient::ConnectorClient(EpollOperation *o, ConnectorGroup *hg, int idx 
     supportBatchKey = 0;
     connectErrorCnt = 0;
     ready = 0;
-    Ready(); // 开始默认可用
+    Ready(); // Start with default availability
 }
 
 ConnectorClient::~ConnectorClient()

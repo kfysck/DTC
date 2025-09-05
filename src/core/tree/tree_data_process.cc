@@ -207,7 +207,7 @@ int TreeDataProcess::do_append(DTCJobOperation &job_op, Node *p_node,
 		snprintf(err_message_, sizeof(err_message_),
 			 "tree-data insert row error: %.*s,%d",
 			 (int)available_space, err_msg ? err_msg : "unknown error", iRet);
-		/*标记加入黑名单*/
+		/* Mark to add to blacklist */
 		job_op.push_black_list_size(m_stTreeData.need_size());
 		return (-2);
 	}
@@ -436,7 +436,7 @@ int TreeDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 		snprintf(err_message_, sizeof(err_message_),
 			 "raw-data init error: %.*s",
 			 (int)available_space, err_msg ? err_msg : "unknown error");
-		/*标记加入黑名单*/
+		/* Mark to add to blacklist */
 		job_op.push_black_list_size(m_stTreeData.need_size());
 		p_buffer_pond_->purge_node(job_op.packed_key(), *p_node);
 		return (-2);
@@ -502,7 +502,7 @@ int TreeDataProcess::do_replace_all(DTCJobOperation &job_op, Node *p_node)
 				"raw-data insert row error: ret=%d,err=%.*s, cnt=%d",
 				iRet, (int)available_space, err_msg ? err_msg : "unknown error",
 				try_purge_count);
-			/*标记加入黑名单*/
+			/* Mark to add to blacklist */
 			job_op.push_black_list_size(all_rows_size);
 			p_buffer_pond_->purge_node(job_op.packed_key(),
 						   *p_node);
@@ -587,9 +587,9 @@ int TreeDataProcess::do_replace(DTCJobOperation &job_op, Node *p_node,
 		RowValue stNewRow(stpTaskTab);
 		stNewRow.default_value();
 		stpNewRow = &stNewRow;
-		job_op.update_row(*stpNewRow); //获取Replace的行
+		job_op.update_row(*stpNewRow); // Get Replace row
 		iRet = m_stTreeData.insert_row(*stpNewRow, KeyCompare,
-					       async); // 加进cache
+					       async); // Add to cache
 		if (iRet == EC_NO_MEM) {
 			if (p_buffer_pond_->try_purge_size(
 				    m_stTreeData.need_size(), *p_node) == 0)
@@ -605,7 +605,7 @@ int TreeDataProcess::do_replace(DTCJobOperation &job_op, Node *p_node,
 			snprintf(err_message_, sizeof(err_message_),
 				 "raw-data replace row error: %d, %.*s", iRet,
 				 (int)available_space, err_msg ? err_msg : "unknown error");
-			/*标记加入黑名单*/
+			/* Mark to add to blacklist */
 			job_op.push_black_list_size(m_stTreeData.need_size());
 			return (-3);
 		}
@@ -617,7 +617,7 @@ int TreeDataProcess::do_replace(DTCJobOperation &job_op, Node *p_node,
 	if (async == true || setrows == true) {
 		job_op.resultInfo.set_affected_rows(ullAffectedRows);
 	} else if (ullAffectedRows != job_op.resultInfo.affected_rows()) {
-		//如果cache更新纪录数和helper更新的纪录数不相等
+		// If the number of cache updated records is not equal to the number of helper updated records
 		log4cplus_debug(
 			"unequal affected rows, cache[%lld], helper[%lld]",
 			(long long)ullAffectedRows,
@@ -668,7 +668,7 @@ int TreeDataProcess::do_update(DTCJobOperation &job_op, Node *p_node,
 	if (async == true || setrows == true) {
 		job_op.resultInfo.set_affected_rows(ullAffectedRows);
 	} else if (ullAffectedRows != job_op.resultInfo.affected_rows()) {
-		//如果cache更新纪录数和helper更新的纪录数不相等
+		// If the number of cache updated records is not equal to the number of helper updated records
 		log4cplus_debug(
 			"unequal affected rows, cache[%lld], helper[%lld]",
 			(long long)ullAffectedRows,

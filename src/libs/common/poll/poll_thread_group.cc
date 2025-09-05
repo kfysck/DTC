@@ -77,7 +77,7 @@ void PollThreadGroup::Start(int numThreads, int mp)
 		snprintf(threadName, sizeof(threadName), "%s@%d", groupName.c_str(), i);
 
 		pollThreads[i] = new PollerBase(threadName);
-		//set_max_pollers一定要再InitializeThread前调用，否则不生效
+		// set_max_pollers must be called before InitializeThread, otherwise it won't take effect
 		pollThreads[i]->set_max_pollers(mp);
 		pollThreads[i]->initialize_thread();
 	}

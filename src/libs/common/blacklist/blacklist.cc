@@ -133,7 +133,7 @@ int BlackList::try_expired_blacklist(void)
 	return 0;
 }
 
-/* TODO: 统计top10 */
+/* TODO: Count top10 */
 void BlackList::stat_everything(const struct blslot *slot, const int add)
 {
 	/* add */

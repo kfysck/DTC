@@ -49,7 +49,7 @@ void daemon_wait(void)
 
 		cpu_stat.do_stat();
 
-		/* 扫描进程打开的fd句柄数，如果超过配置阈值，向二级网管告警 */
+		/* Scan process open fd handle count, if exceeds configured threshold, alert to secondary network management */
 		statfd = scan_process_openning_fd();
 		if ((unsigned)statfd > fdthreshold) {
 			log4cplus_fatal(
@@ -63,7 +63,7 @@ void daemon_wait(void)
 	}
 }
 
-/* 扫描进程已打开的文件句柄数 */
+/* Scan number of file handles opened by process */
 unsigned int scan_process_openning_fd(void)
 {
 	unsigned int count = 0;

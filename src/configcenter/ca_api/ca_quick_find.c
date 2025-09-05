@@ -16,7 +16,7 @@
 */
 #include "ca_quick_find.h"
 
-//二分查找
+//Binary search
 int binary_search_header(NODE_HEADER *headers_ptr, const int low,
 			 const int high, const int key)
 {
